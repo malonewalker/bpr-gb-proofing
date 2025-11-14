@@ -402,8 +402,8 @@ def run_sl_newvalidate(
 # -----------------------------
 # Streamlit UI
 # -----------------------------
-st.set_page_config(page_title="BPR — Unified Runner (Streamlit)", layout="wide")
-st.title("BPR — Unified Runner (sl-bprproofing + sl-proofing + sl-newvalidate)")
+st.set_page_config(page_title="BPR — Book Proofing App (Streamlit)", layout="wide")
+st.title("BPR — Book Proofing App")
 
 with st.sidebar:
     st.header("Inputs")
