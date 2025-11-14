@@ -412,12 +412,12 @@ with st.sidebar:
 
     # 🔁 One reference file used for BOTH Expected Order and BBB (newvalidate)
     ref_file = st.file_uploader(
-        "Upload BBB)",
+        "Upload BBB",
         type=["csv", "xlsx", "xls", "txt"],
         help="Same file is used for TOC/Expected Order checks and BBB/newvalidate checks."
     )
 
-    run_btn = st.button("Run Pipeline")
+    run_btn = st.button("Run All")
 
 
 def _read_tabular(upload) -> Optional[pd.DataFrame]:
@@ -440,18 +440,16 @@ nv_errors_df: Optional[pd.DataFrame] = None
 if run_btn:
     if not pdf_file:
         st.warning("Please upload a PDF.")
-    elif not expected_file:
+    elif not ref_file:
         st.warning("Please upload an Expected Order file (CSV/Excel).")
-    elif not bbb_file:
-        st.warning("Please upload a BBB reference file (CSV/Excel).")
+
     else:
         with st.status("Processing…", expanded=False) as s:
             try:
                 pdf_bytes = pdf_file.read()
-                expected_df = _read_tabular(expected_file)
-                bbb_df = _read_tabular(bbb_file)
+                expected_df = _read_tabular(ref_file)
 
-                if expected_df is None or bbb_df is None:
+                if expected_df is None or ref_file is None:
                     st.stop()
 
                 # 1) BPRproofing (Listings, Profiles, Pages, Errors)
@@ -463,7 +461,7 @@ if run_btn:
                     st.error("No Profiles data returned from sl_bprproofing; cannot run newvalidate.")
                     st.stop()
 
-                checked_profiles, nv_errors_df = run_sl_newvalidate(raw_profiles, bbb_df)
+                checked_profiles, nv_errors_df = run_sl_newvalidate(raw_profiles, ref_file)
 
                 # 3) TOC checks
                 proof_out = run_sl_proofing(pdf_bytes, expected_df)
