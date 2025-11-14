@@ -390,10 +390,10 @@ def main():
     print(f"\nLoading PRIMARY: {primary_path}")
     primary_df = load_table(primary_path)
     print(f"Loading BBB: {bbb_path}")
-    bbb_df = load_table(bbb_path)
+    ref_file = load_table(bbb_path)
 
     # Run checks
-    checked = run_checks(primary_df, bbb_df)
+    checked = run_checks(primary_df, ref_file)
 
     # Build ERRORS tab
     errors_tab = build_errors_tab(checked)

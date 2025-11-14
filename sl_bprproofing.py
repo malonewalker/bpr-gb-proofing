@@ -662,15 +662,15 @@ def compare_orders_with_csv(target_xlsx_path: str, csv_path: str):
         return
 
     # --- Load CSV and validate required headers
-    expected_df = pd.read_csv(csv_path)
-    if "Category" not in expected_df.columns or "BPR Position" not in expected_df.columns:
+    ref_file = pd.read_csv(csv_path)
+    if "Category" not in ref_file.columns or "BPR Position" not in ref_file.columns:
         raise KeyError("CSV must contain 'Category' and 'BPR Position' columns.")
-    if "PublishedName" not in expected_df.columns:
+    if "PublishedName" not in ref_file.columns:
         raise KeyError("CSV must contain 'PublishedName' (company name) column.")
 
     # Build CSV map: (cat_norm, company_norm) -> expected position
     exp_map: Dict[Tuple[str, str], int] = {}
-    for _, r in expected_df.iterrows():
+    for _, r in ref_file.iterrows():
         cat_raw = str(r.get("Category", "")).strip()
         co_raw  = str(r.get("PublishedName", "")).strip()
         pos     = _safe_int_local(r.get("BPR Position"))
@@ -777,8 +777,8 @@ def compare_orders_with_csv(target_xlsx_path: str, csv_path: str):
     def _key_str(cat_norm, co_norm):
         # CSV-side category recovery
         try:
-            cat_disp_csv = expected_df.loc[
-                expected_df["Category"].apply(lambda x: normalize_label_simple(str(x))) == cat_norm, "Category"
+            cat_disp_csv = ref_file.loc[
+                ref_file["Category"].apply(lambda x: normalize_label_simple(str(x))) == cat_norm, "Category"
             ].iloc[0]
         except Exception:
             cat_disp_csv = cat_norm
@@ -788,8 +788,8 @@ def compare_orders_with_csv(target_xlsx_path: str, csv_path: str):
             comp_disp_pdf = pdf_map[(cat_norm, co_norm)][3]
         if not comp_disp_pdf:
             try:
-                comp_disp_csv = expected_df.loc[
-                    expected_df["PublishedName"].apply(lambda x: _norm_company_name(str(x))) == co_norm,
+                comp_disp_csv = ref_file.loc[
+                    ref_file["PublishedName"].apply(lambda x: _norm_company_name(str(x))) == co_norm,
                     "PublishedName"
                 ].iloc[0]
             except Exception:
