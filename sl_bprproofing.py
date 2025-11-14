@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from PyPDF2 import PdfReader
-from tkinter import Tk, filedialog
 import re
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment            # NEW
@@ -9,11 +8,24 @@ from openpyxl.utils import get_column_letter
 from typing import List, Optional, Tuple, Dict, Any
 import json
 
+# Tkinter is optional: available on desktop, NOT on Streamlit Cloud
+try:
+    from tkinter import Tk, filedialog
+except Exception:
+    Tk = None
+    filedialog = None
+
 PHRASE = "Best Pick Reports recommends:"         # for Listings (case-insensitive)
 TEXT_COL_CANDIDATES = ["text", "Text", "TEXT"]   # preferred column(s) to search
 
 def choose_file_dialog():
-    """Show a reliable dialog to pick a PDF file."""
+    """Show a reliable dialog to pick a PDF file (desktop only)."""
+    if Tk is None or filedialog is None:
+        raise RuntimeError(
+            "Tkinter GUI is not available in this environment; "
+            "use a non-GUI entry point instead (e.g. Streamlit)."
+        )
+
     os.environ.setdefault("TK_SILENCE_DEPRECATION", "1")
     root = Tk()
     root.withdraw()
@@ -187,12 +199,13 @@ def write_into_existing_workbook(src_path: str,
                         cell.alignment = Alignment(wrap_text=True)
     wb.save(src_path)
     return src_path
+
 # ------------------------------------------------------
 # ---------- Save-As dialog for the final copy ----------
 def pick_output_xlsx(default_dir: str, default_name: str) -> str:
     try:
         import tkinter as tk
-        from tkinter import filedialog
+        from tkinter import filedialog as tk_filedialog
         os.environ.setdefault("TK_SILENCE_DEPRECATION", "1")
         root = tk.Tk(); root.withdraw()
         try:
@@ -200,7 +213,7 @@ def pick_output_xlsx(default_dir: str, default_name: str) -> str:
         except tk.TclError:
             pass
         initialfile = f"{default_name}_tocsplit.xlsx"
-        path = filedialog.asksaveasfilename(
+        path = tk_filedialog.asksaveasfilename(
             title="Save output workbook as…",
             defaultextension=".xlsx",
             initialdir=default_dir,
@@ -531,7 +544,13 @@ def resolve_clean_category(label: str, alias_map: dict[str, str]) -> str:
 
 # ===== New: CSV picker and comparison helpers =====
 def choose_csv_dialog() -> str:
-    """Show a dialog to pick the expected-order CSV file."""
+    """Show a dialog to pick the expected-order CSV file (desktop only)."""
+    if Tk is None or filedialog is None:
+        raise RuntimeError(
+            "Tkinter GUI is not available in this environment; "
+            "use a non-GUI entry point instead (e.g. Streamlit)."
+        )
+
     os.environ.setdefault("TK_SILENCE_DEPRECATION", "1")
     root = Tk()
     root.withdraw()
