@@ -578,4 +578,4 @@ if results:
         use_container_width=True,
     )
 else:
-    st.info("Upload a PDF, Expected Order file, and BBB file, then click **Run All**.")
+    st.info("Upload the Book PDF and the BBB file. Then click **Run All**.")
