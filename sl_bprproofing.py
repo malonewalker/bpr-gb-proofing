@@ -1,4 +1,5 @@
 import os
+import tempfile 
 import pandas as pd
 from PyPDF2 import PdfReader
 import re
@@ -918,6 +919,139 @@ def add_errors_column_to_listings_split(xlsx_path: str):
             cell.alignment = Alignment(wrap_text=True, vertical="top")
 
     wb.save(xlsx_path)
+
+def run_pipeline(pdf_bytes: bytes,
+                 expected_order_df: Optional[pd.DataFrame] = None) -> Dict[str, pd.DataFrame]:
+    """
+    Streamlit-friendly entry point.
+
+    - Takes PDF bytes (uploaded file)
+    - Optionally takes an expected-order DataFrame (not yet used here, but kept for API compatibility)
+    - Runs:
+       • PDF → Pages
+       • Pages → TOC / Listings / Profiles
+       • TOC Review (Front/Back)
+       • Listings → Listings_Split
+    - Returns a dict of DataFrames with keys:
+       'Listings_Split', 'Errors', 'TOC Presence Check', 'TOC Review',
+       'Profiles', 'Listings', 'Pages'
+    """
+    # --- 1) Write PDF to a temp file ---
+    tmpdir = tempfile.mkdtemp()
+    pdf_path = os.path.join(tmpdir, "input.pdf")
+    with open(pdf_path, "wb") as f:
+        f.write(pdf_bytes)
+
+    # --- 2) Extract pages and create initial workbook (Pages + Summary) ---
+    pages = extract_pdf_text(pdf_path)
+    xlsx_path = save_to_excel(pdf_path, pages)
+
+    # DataFrame for Pages
+    try:
+        df_pages = pd.read_excel(xlsx_path, sheet_name="Pages")
+    except Exception as e:
+        print(f"[ERROR] Couldn't read 'Pages' sheet in run_pipeline: {e}")
+        df_pages = pd.DataFrame(columns=["page", "text"])
+
+    # --- 3) Build TOC / Listings / Profiles from Pages ---
+    try:
+        df_toc, df_listings_raw, df_profiles, used_col = build_tabs_keep_rows(df_pages)
+    except Exception as e:
+        print(f"[ERROR] Parsing failed in run_pipeline: {e}")
+        df_toc = pd.DataFrame()
+        df_listings_raw = pd.DataFrame()
+        df_profiles = pd.DataFrame()
+        used_col = "<unknown>"
+
+    # Write TOC, Listings, Profiles back into workbook
+    try:
+        out_path = write_into_existing_workbook(xlsx_path, df_toc, df_listings_raw, df_profiles)
+    except Exception as e:
+        print(f"[ERROR] Failed to write TOC/Listings/Profiles in run_pipeline: {e}")
+        out_path = xlsx_path
+
+    # --- 4) TOC Review sheet (Front/Back) ---
+    df_toc_review = pd.DataFrame()
+    try:
+        wb = load_workbook(out_path)
+        if "TOC" in wb.sheetnames:
+            ws_toc = wb["TOC"]
+
+            # Read TOC!B2 (front) and TOC!B3 (back)
+            b2_raw = ws_toc["B2"].value
+            b3_raw = ws_toc["B3"].value
+            front_raw = normalize_text(str(b2_raw) if b2_raw is not None else "")
+            back_raw  = normalize_text(str(b3_raw) if b3_raw is not None else "")
+
+            # Clean B2 up to/including "Table of Contents"
+            front_clean = strip_before_toc(front_raw)
+            ws_toc["B2"].value = front_clean  # store cleaned value back into TOC
+
+            # Parse pairs
+            front_pairs = parse_pairs_split_on_numbers(front_clean)
+            back_pairs  = parse_pairs_split_on_numbers(back_raw)
+
+            # Write TOC Review sheet
+            write_split_sheet(wb, front_pairs, back_pairs)
+
+            wb.save(out_path)
+
+            try:
+                df_toc_review = pd.read_excel(out_path, sheet_name="TOC Review")
+            except Exception as e:
+                print(f"[WARN] Could not re-read 'TOC Review' as DataFrame: {e}")
+                df_toc_review = pd.DataFrame()
+        else:
+            print("[WARN] 'TOC' sheet not found; skipping TOC Review in run_pipeline.")
+            wb.close()
+    except Exception as e:
+        print(f"[WARN] TOC Review step skipped in run_pipeline due to error: {e}")
+        df_toc_review = pd.DataFrame()
+
+    # --- 5) Listings_Split: explode Ratings entries from Listings sheet ---
+    df_listings_split = pd.DataFrame()
+    try:
+        df_listings_sheet = pd.read_excel(out_path, sheet_name="Listings")
+    except Exception as e:
+        print(f"[ERROR] Couldn't read 'Listings' sheet in run_pipeline: {e}")
+        df_listings_sheet = pd.DataFrame()
+
+    try:
+        if "text" in df_listings_sheet.columns:
+            if "page" not in df_listings_sheet.columns:
+                df_listings_sheet["page"] = None
+
+            out_records: List[Dict[str, Any]] = []
+            for _, row in df_listings_sheet.iterrows():
+                out_records.extend(process_listing_row(row))
+            df_listings_split = pd.DataFrame(out_records)
+
+            # Write Listings_Split back into workbook (not strictly needed for Streamlit, but keeps parity)
+            with pd.ExcelWriter(out_path, engine="openpyxl", mode="a", if_sheet_exists="replace") as xw:
+                df_listings_split.to_excel(xw, index=False, sheet_name="Listings_Split")
+
+            print(f"[OK] Listings_Split created in run_pipeline. Rows: {len(df_listings_split)}")
+        else:
+            print("[WARN] 'Listings' sheet missing 'text' column; no Listings_Split built in run_pipeline.")
+    except Exception as e:
+        print(f"[WARN] Listings_Split step skipped in run_pipeline due to error: {e}")
+        df_listings_split = pd.DataFrame()
+
+    # --- 6) Build results dict for Streamlit ---
+    results: Dict[str, pd.DataFrame] = {}
+
+    # Always include these, even if empty
+    results["Listings_Split"] = df_listings_split
+    results["Errors"] = pd.DataFrame()              # placeholder; full validation is done elsewhere
+    results["TOC Presence Check"] = pd.DataFrame()  # placeholder; can be filled by other logic
+    results["TOC Review"] = df_toc_review
+    results["Profiles"] = df_profiles
+    results["Listings"] = df_listings_raw
+    results["Pages"] = df_pages
+
+    return results
+
+
 
 def main():
     # Step 1: pick PDF and write Pages/Summary
