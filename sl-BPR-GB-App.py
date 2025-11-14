@@ -407,11 +407,18 @@ st.title("BPR — Book Proofing App")
 
 with st.sidebar:
     st.header("Inputs")
-    pdf_file = st.file_uploader("Best Pick PDF", type=["pdf"])
-    expected_file = st.file_uploader("Expected order (BPRproofing / TOC)", type=["csv", "xlsx", "xls"])
-    bbb_file = st.file_uploader("BBB reference (newvalidate)", type=["csv", "xlsx", "xls"])
-    st.markdown("---")
-    run_btn = st.button("Run All")
+
+    pdf_file = st.file_uploader("Upload Book PDF", type=["pdf"])
+
+    # 🔁 One reference file used for BOTH Expected Order and BBB (newvalidate)
+    ref_file = st.file_uploader(
+        "Upload BBB)",
+        type=["csv", "xlsx", "xls", "txt"],
+        help="Same file is used for TOC/Expected Order checks and BBB/newvalidate checks."
+    )
+
+    run_btn = st.button("Run Pipeline")
+
 
 def _read_tabular(upload) -> Optional[pd.DataFrame]:
     if upload is None:
@@ -578,4 +585,4 @@ if results:
         use_container_width=True,
     )
 else:
-    st.info("Upload the Book PDF and the BBB file. Then click **Run All**.")
+    st.info("Upload the Book PDF, upload the BBB file, and click **Run All**.")
