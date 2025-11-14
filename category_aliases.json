@@ -1,0 +1,28 @@
+{
+"Air Conditioning & Heating": ["Heating & Air Conditioning"],
+"Heating & Air Conditioning": ["Air Conditioning & Heating"],
+"Bathtub & Shower Conversions": ["Shower & Bathtub Conversions"],
+"Carpet & Upholstery Cleaning": ["Upholstery & Carpet Cleaning"],
+"Carpet, Upholstery & Rug Cleaning": ["Upholstery, Rug & Carpet Cleaning"],
+"Chimneys & Fireplaces": ["Fireplaces & Chimneys"],
+"Closet, Kitchen & Garage Organizers": ["Kitchen, Closet & Garage Organizers"],
+"Drain/Sewer Cleaning & Repair": ["Sewer/Drain Cleaning & Repair"],
+"Driveways - Asphalt": ["Asphalt Driveways"],
+"Glass Installation & Repair": ["Window Repair"],
+"Impact Windows & Doors": 
+    ["Door & Window Replacement",
+    "Window & Door Replacement"],
+"Kitchen & Bathroom Remodeling": ["Bathroom & Kitchen Remodeling"],
+"Pest & Termite Control": ["Termite & Pest Control"],
+"Water, Fire & Storm Damage Restoration": [
+    "Fire Damage Restoration",
+    "Storm Damage Restoration"],
+"Water, Mold, Fire & Storm Damage Restoration": [
+    "Fire Damage Restoration",
+    "Mold Removal",
+    "Storm Damage Restoration"],
+"Wildlife Removal": ["Animal Removal"],
+"Window & Door Replacement": ["Door & Window Replacement"],
+"Window Cleaning & Pressure Washing": ["Pressure Washing & Window Cleaning"]
+
+}
