@@ -345,26 +345,26 @@ def build_excel_bytes(
 # Wrappers over sl_* modules
 # (adjust function names here if yours differ)
 # -----------------------------
-def run_sl_bpr(pdf_bytes: bytes, expected_df: Optional[pd.DataFrame]) -> Dict[str, pd.DataFrame]:
+def run_sl_bpr(pdf_bytes: bytes, ref_file: Optional[pd.DataFrame]) -> Dict[str, pd.DataFrame]:
     """
     Expected: return a dict of DataFrames with keys like:
       'Listings_Split', 'Listings', 'Pages', 'Profiles', 'Errors'
     Adjust this wrapper to match your actual sl_bprproofing API.
     """
     # Example assumption:
-    return bpr.run_pipeline(pdf_bytes=pdf_bytes, expected_order_df=expected_df)
+    return bpr.run_pipeline(pdf_bytes=pdf_bytes, expected_order_df=ref_file)
 
 
-def run_sl_proofing(pdf_bytes: bytes, expected_df: Optional[pd.DataFrame]) -> Dict[str, pd.DataFrame]:
+def run_sl_proofing(pdf_bytes: bytes, ref_file: Optional[pd.DataFrame]) -> Dict[str, pd.DataFrame]:
     """
     Expected keys:
       'TOC Presence Check', 'TOC Review', maybe 'Errors'
     """
-    return prof.run_pipeline(pdf_bytes=pdf_bytes, expected_order_df=expected_df)
+    return prof.run_pipeline(pdf_bytes=pdf_bytes, expected_order_df=ref_file)
 
 
 def run_sl_newvalidate(
-    profiles_df: pd.DataFrame, bbb_df: pd.DataFrame
+    profiles_df: pd.DataFrame, ref_file: pd.DataFrame
 ) -> tuple[pd.DataFrame, Optional[pd.DataFrame]]:
     """
     Expected to behave like newvalidate.run_checks but for DataFrames, e.g.:
@@ -373,7 +373,7 @@ def run_sl_newvalidate(
       - returns just checked_df
     This wrapper normalizes that into (checked_df, errors_df_or_None).
     """
-    result = nv.run_checks(profiles_df.copy(), bbb_df)
+    result = nv.run_checks(profiles_df.copy(), ref_file)
 
     checked_df: pd.DataFrame
     nv_errors_df: Optional[pd.DataFrame] = None
@@ -447,13 +447,13 @@ if run_btn:
         with st.status("Processing…", expanded=False) as s:
             try:
                 pdf_bytes = pdf_file.read()
-                expected_df = _read_tabular(ref_file)
+                ref_file = _read_tabular(ref_file)
 
-                if expected_df is None or ref_file is None:
+                if ref_file is None or ref_file is None:
                     st.stop()
 
                 # 1) BPRproofing (Listings, Profiles, Pages, Errors)
-                bpr_out = run_sl_bpr(pdf_bytes, expected_df)
+                bpr_out = run_sl_bpr(pdf_bytes, ref_file)
 
                 # 2) Profiles validation
                 raw_profiles = bpr_out.get("Profiles")
@@ -464,7 +464,7 @@ if run_btn:
                 checked_profiles, nv_errors_df = run_sl_newvalidate(raw_profiles, ref_file)
 
                 # 3) TOC checks
-                proof_out = run_sl_proofing(pdf_bytes, expected_df)
+                proof_out = run_sl_proofing(pdf_bytes, ref_file)
 
                 # Collect results dict
                 results = {}
