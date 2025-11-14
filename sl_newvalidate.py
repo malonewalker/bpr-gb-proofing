@@ -5,34 +5,43 @@ import os
 import re
 import sys
 import unicodedata
-import tkinter as tk
-from tkinter import filedialog
 from typing import Optional, Set, List, Tuple
 
 import pandas as pd
+
+# Tkinter is optional: desktop only, NOT available on Streamlit Cloud
+try:
+    import tkinter as tk
+    from tkinter import filedialog
+except Exception:
+    tk = None
+    filedialog = None
 
 # -----------------------------
 # GUI File Picker
 # -----------------------------
 def select_file(title: str) -> Optional[str]:
-    """Always open a file dialog to select a CSV or Excel file."""
+    """Desktop-only file picker. Do not use from Streamlit."""
+    if tk is None or filedialog is None:
+        raise RuntimeError(
+            "Tkinter GUI is not available in this environment; "
+            "use a non-GUI entry point (e.g. Streamlit) instead."
+        )
+
     root = tk.Tk()
     root.withdraw()
-    file_path = filedialog.askopenfilename(
-        title=title,
-        filetypes=[
-            ("Excel or CSV files", "*.xlsx *.xls *.csv *.txt"),
-            ("Excel files", "*.xlsx *.xls"),
-            ("CSV files", "*.csv *.txt"),
-            ("All files", "*.*"),
-        ],
-    )
-    root.update()
-    root.destroy()
-    if not file_path:
-        print(f"❌ You must select a file for: {title}")
-        sys.exit(1)
-    return file_path
+    try:
+        file_path = filedialog.askopenfilename(
+            title=title,
+            filetypes=[("Excel or CSV files", "*.xlsx *.xls *.csv *.txt")]
+        )
+    finally:
+        try:
+            root.destroy()
+        except Exception:
+            pass
+    return file_path or None
+
 
 # -----------------------------
 # Utilities
