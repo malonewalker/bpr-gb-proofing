@@ -555,6 +555,35 @@ def pick_pdf_file_via_dialog() -> Path:
         raise SystemExit("Invalid selection (must be an existing .pdf file). Exiting.")
     return p
 
+import tempfile
+from pathlib import Path
+
+def run_pipeline(pdf_bytes: bytes, expected_order_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
+    """
+    Streamlit-friendly entry point.
+
+    - Accepts PDF bytes (from file_uploader)
+    - Optionally accepts expected_order_df (not used here yet, but kept for API compatibility)
+    - Returns the Profiles DataFrame from process_pdf
+    """
+    # 1) Write bytes to a temporary PDF file
+    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
+        tmp.write(pdf_bytes)
+        tmp_path = Path(tmp.name)
+
+    try:
+        # 2) Reuse your existing logic
+        df_profiles = process_pdf(tmp_path)
+    finally:
+        # 3) Clean up the temp file
+        try:
+            tmp_path.unlink()
+        except OSError:
+            pass
+
+    return df_profiles
+
+
 
 def main():
     parser = argparse.ArgumentParser(
