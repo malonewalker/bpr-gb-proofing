@@ -46,20 +46,13 @@ def main():
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        pdf_file = st.file_uploader("GB PDF", type=["pdf"], key="pdf_upload")
+        pdf_file = st.file_uploader("Book PDF", type=["pdf"], key="pdf_upload")
 
     with col2:
         bpr_ref_file = st.file_uploader(
-            "Expected-order (BPRproofing) Excel/CSV",
+            "BBB File",
             type=["xlsx", "xls", "csv", "txt"],
             key="bpr_ref_upload",
-        )
-
-    with col3:
-        bbb_file = st.file_uploader(
-            "BBB reference Excel/CSV",
-            type=["xlsx", "xls", "csv", "txt"],
-            key="bbb_upload",
         )
 
     st.markdown("---")
@@ -67,7 +60,7 @@ def main():
 
     if run_button:
         # Basic validation
-        if pdf_file is None or bpr_ref_file is None or bbb_file is None:
+        if pdf_file is None or bpr_ref_file is None or bpr_ref_file is None:
             st.error("Please upload **all three** files before running the pipeline.")
             return
 
@@ -87,7 +80,6 @@ def main():
             # Save uploads
             save_uploaded_file(pdf_file, pdf_path)
             save_uploaded_file(bpr_ref_file, bpr_path)
-            save_uploaded_file(bbb_file, bbb_path)
 
             # Run the pipeline
             with st.spinner("Running BPR GB pipeline... this may take a bit."):
