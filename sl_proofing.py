@@ -22,12 +22,6 @@ import pandas as pd
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 
-try:
-    import tkinter as tk
-    from tkinter import filedialog
-except Exception:
-    tk = None
-    filedialog = None
 
 # =========================
 # Regexes & constants
@@ -664,37 +658,6 @@ def process_pdf(pdf_path: Path) -> pd.DataFrame:
     return df[cols]
 
 
-def pick_pdf_file_via_dialog() -> Path:
-    """
-    Open a native file dialog to select a single PDF.
-    Exits if no selection is made or the environment cannot show a dialog.
-    """
-    if tk is None or filedialog is None:
-        raise SystemExit(
-            "This script requires a GUI file dialog, but tkinter is unavailable."
-        )
-
-    root = tk.Tk()
-    root.withdraw()
-    root.update_idletasks()
-    try:
-        file_path = filedialog.askopenfilename(
-            title="Select Best Pick PDF",
-            filetypes=[("PDF files", "*.pdf")],
-            multiple=False,
-        )
-    finally:
-        root.destroy()
-
-    if not file_path:
-        raise SystemExit("No file selected. Exiting.")
-
-    p = Path(file_path)
-    if not p.exists() or p.suffix.lower() != ".pdf":
-        raise SystemExit("Invalid selection (must be an existing .pdf file). Exiting.")
-    return p
-
-
 # =========================
 # Streamlit-friendly wrapper
 # =========================
@@ -721,41 +684,3 @@ def run_pipeline(pdf_bytes: bytes, expected_order_df: Optional[pd.DataFrame] = N
     return df_profiles
 
 
-# =========================
-# CLI entry point
-# =========================
-def main():
-    parser = argparse.ArgumentParser(
-        description=(
-            "Extract one row per half-page Company Profile from a Best Pick PDF "
-            "(starting at TOC). Category equals page header."
-        )
-    )
-    # No positional PDF arg — we always use the dialog now
-    parser.add_argument(
-        "-o",
-        "--output",
-        default=None,
-        help="Output CSV path (default: <selected-pdf-stem>_profiles.csv)",
-    )
-    args = parser.parse_args()
-
-    pdf_path = pick_pdf_file_via_dialog()
-    df = process_pdf(pdf_path)
-
-    # Choose output name (default comes from the selected PDF name)
-    output_csv = args.output or f"{pdf_path.stem}_profiles.csv"
-
-    # Write CSV
-    df.to_csv(
-        output_csv,
-        index=False,
-        encoding="utf-8-sig",
-        na_rep="",
-    )
-
-    print(f"Profile extraction complete! {len(df)} profiles saved to {output_csv}")
-
-
-if __name__ == "__main__":
-    main()

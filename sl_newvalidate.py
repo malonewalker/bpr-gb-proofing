@@ -5,34 +5,9 @@ import os
 import re
 import sys
 import unicodedata
-import tkinter as tk
-from tkinter import filedialog
 from typing import Optional, Set, List, Tuple
 
 import pandas as pd
-
-# -----------------------------
-# GUI File Picker
-# -----------------------------
-def select_file(title: str) -> Optional[str]:
-    """Always open a file dialog to select a CSV or Excel file."""
-    root = tk.Tk()
-    root.withdraw()
-    file_path = filedialog.askopenfilename(
-        title=title,
-        filetypes=[
-            ("Excel or CSV files", "*.xlsx *.xls *.csv *.txt"),
-            ("Excel files", "*.xlsx *.xls"),
-            ("CSV files", "*.csv *.txt"),
-            ("All files", "*.*"),
-        ],
-    )
-    root.update()
-    root.destroy()
-    if not file_path:
-        print(f"❌ You must select a file for: {title}")
-        sys.exit(1)
-    return file_path
 
 # -----------------------------
 # Utilities
@@ -390,35 +365,4 @@ def load_table(path: str) -> pd.DataFrame:
     else:
         raise ValueError(f"Unsupported file extension: {ext}")
 
-def main():
-    print("📂 Please select your Extracted PDF file...")
-    primary_path = select_file("Select the PRIMARY (Extracted PDF) file")
 
-    print("\n📂 Please select your BBB Report file...")
-    bbb_path = select_file("Select the REFERENCE (BBB) file")
-
-    # Load data
-    print(f"\nLoading PRIMARY: {primary_path}")
-    primary_df = load_table(primary_path)
-    print(f"Loading BBB: {bbb_path}")
-    bbb_df = load_table(bbb_path)
-
-    # Run checks
-    checked = run_checks(primary_df, bbb_df)
-
-    # Build ERRORS tab
-    errors_tab = build_errors_tab(checked)
-
-    # Save: two tabs -> Profiles (full data) and ERRORS (summary)
-    out_path = infer_output_path(primary_path)
-    with pd.ExcelWriter(out_path, engine="openpyxl") as writer:
-        checked.to_excel(writer, index=False, sheet_name="Profiles")
-        errors_tab.to_excel(writer, index=False, sheet_name="ERRORS")
-
-    print(f"\n✅ Checks complete! Output saved to:\n{out_path}")
-    print("   • Sheet 'Profiles' contains the full dataset (with Notes_*, ERRORS, and ERRORS_DETAIL).")
-    print("   • Sheet 'ERRORS' now explodes issues into one row each and fills Expected / Found where applicable "
-          "(licenses & phone discrepancies, plus some verified-block expectations).")
-
-if __name__ == "__main__":
-    main()
