@@ -598,8 +598,7 @@ def tidy_up_final_workbook(save_path: str):
 # -----------------------------
 def run_pipeline(
     pdf_path: str,
-    bpr_csv_path: str,
-    bbb_path: str,
+    ref_excel_path: str,
     save_path: str,
 ) -> str:
     """
@@ -627,13 +626,13 @@ def run_pipeline(
     - Read save_path back into bytes and offer as a download.
     """
     # 1) Run BPRproofing with the same selections
-    bpr_out_xlsx = run_bprproofing_inprocess(pdf_path, bpr_csv_path)
+    bpr_out_xlsx = run_bprproofing_inprocess(pdf_path, ref_excel_path)
 
     # 2) Profiles + Validation using the same PDF and BBB Excel/CSV
     try:
         profiles_df, checked_df, toc_review_df, nv_errors_df = run_proofing_and_validate(
             pdf_path,
-            bbb_path,
+            ref_excel_path,
         )
     except Exception as e:
         print(f"[ERROR] Failed during Profiles/Validate stage: {e}")
