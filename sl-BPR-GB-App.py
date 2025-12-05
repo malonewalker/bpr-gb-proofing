@@ -46,7 +46,7 @@ def main():
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        pdf_file = st.file_uploader("GB PDF", type=["pdf"], key="pdf_upload")
+        pdf_file = st.file_uploader("Book PDF", type=["pdf"], key="pdf_upload")
 
     with col2:
         bpr_ref_file = st.file_uploader(
