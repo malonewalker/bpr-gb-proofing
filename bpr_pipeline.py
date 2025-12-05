@@ -52,7 +52,10 @@ RAW_PROFILES_NAME = "Profiles_Raw"
 # -----------------------------
 # Step 1 — Run BPRproofing *in-process* with monkeypatched pickers
 # -----------------------------
-def run_bprproofing_inprocess(pdf_path: str, bpr_csv_path: str) -> Optional[str]:
+def run_bprproofing_inprocess(pdf_path: str, ref_excel_path: str) -> str:
+    # assuming sl_bprproofing.main takes these args and returns the output xlsx path
+    return bpr.main(pdf_path=pdf_path, ref_excel_path=ref_excel_path)
+
     """
     Call BPRproofing.main() while forcing its dialogs to return our chosen paths.
     Returns the final workbook path BPRproofing produced (best-effort).
