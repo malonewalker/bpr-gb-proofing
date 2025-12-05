@@ -5,43 +5,34 @@ import os
 import re
 import sys
 import unicodedata
+import tkinter as tk
+from tkinter import filedialog
 from typing import Optional, Set, List, Tuple
 
 import pandas as pd
-
-# Tkinter is optional: desktop only, NOT available on Streamlit Cloud
-try:
-    import tkinter as tk
-    from tkinter import filedialog
-except Exception:
-    tk = None
-    filedialog = None
 
 # -----------------------------
 # GUI File Picker
 # -----------------------------
 def select_file(title: str) -> Optional[str]:
-    """Desktop-only file picker. Do not use from Streamlit."""
-    if tk is None or filedialog is None:
-        raise RuntimeError(
-            "Tkinter GUI is not available in this environment; "
-            "use a non-GUI entry point (e.g. Streamlit) instead."
-        )
-
+    """Always open a file dialog to select a CSV or Excel file."""
     root = tk.Tk()
     root.withdraw()
-    try:
-        file_path = filedialog.askopenfilename(
-            title=title,
-            filetypes=[("Excel or CSV files", "*.xlsx *.xls *.csv *.txt")]
-        )
-    finally:
-        try:
-            root.destroy()
-        except Exception:
-            pass
-    return file_path or None
-
+    file_path = filedialog.askopenfilename(
+        title=title,
+        filetypes=[
+            ("Excel or CSV files", "*.xlsx *.xls *.csv *.txt"),
+            ("Excel files", "*.xlsx *.xls"),
+            ("CSV files", "*.csv *.txt"),
+            ("All files", "*.*"),
+        ],
+    )
+    root.update()
+    root.destroy()
+    if not file_path:
+        print(f"❌ You must select a file for: {title}")
+        sys.exit(1)
+    return file_path
 
 # -----------------------------
 # Utilities
@@ -228,7 +219,6 @@ def run_checks(primary: pd.DataFrame, bbb: pd.DataFrame) -> pd.DataFrame:
                         row_notes_compare,
                         "expected 'Verified Workers' Comp' in Verified Block"
                     )
-                    # Optional: include expected/found context here too
                     row_error_items.append((
                         "expected 'Verified Workers' Comp' in Verified Block",
                         "Verified Workers' Comp",
@@ -358,6 +348,27 @@ def build_errors_tab(primary: pd.DataFrame) -> pd.DataFrame:
     return errors_df
 
 # -----------------------------
+# Streamlit-friendly wrapper
+# -----------------------------
+def run_pipeline(primary_df: pd.DataFrame, bbb_df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Streamlit-friendly entry point.
+
+    - primary_df: Profiles dataframe (from proofing pipeline)
+    - bbb_df: BBB reference dataframe
+    Returns:
+      (checked_profiles_df, errors_tab_df)
+    """
+    # Work on copies so original dfs passed in aren't mutated unintentionally
+    primary_copy = primary_df.copy()
+    bbb_copy = bbb_df.copy()
+
+    checked = run_checks(primary_copy, bbb_copy)
+    errors_tab = build_errors_tab(checked)
+
+    return checked, errors_tab
+
+# -----------------------------
 # Main
 # -----------------------------
 def infer_output_path(primary_path: str) -> str:
@@ -390,10 +401,10 @@ def main():
     print(f"\nLoading PRIMARY: {primary_path}")
     primary_df = load_table(primary_path)
     print(f"Loading BBB: {bbb_path}")
-    ref_file = load_table(bbb_path)
+    bbb_df = load_table(bbb_path)
 
     # Run checks
-    checked = run_checks(primary_df, ref_file)
+    checked = run_checks(primary_df, bbb_df)
 
     # Build ERRORS tab
     errors_tab = build_errors_tab(checked)
