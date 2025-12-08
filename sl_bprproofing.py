@@ -1133,6 +1133,26 @@ def run_bprproofing_from_paths(
 
     return workbook_path
 
+def main(
+    pdf_path: str,
+    ref_excel_path: str,
+    alias_json_path: Optional[str] = None,
+) -> str:
+    """
+    Entry point used by bpr_pipeline.run_bprproofing_inprocess(...).
+
+    bpr_pipeline does:
+        sl_bprproofing.main(pdf_path=..., ref_excel_path=...)
+
+    This just forwards to run_bprproofing_from_paths, which does the full
+    file-based BPR proofing run and returns the final workbook path.
+    """
+    return run_bprproofing_from_paths(
+        pdf_path=pdf_path,
+        ref_excel_path=ref_excel_path,
+        alias_json_path=alias_json_path,
+    )
+
 # --------------------------------------------------------------------
 # Existing bytes-based Streamlit helper (unchanged)
 # --------------------------------------------------------------------
