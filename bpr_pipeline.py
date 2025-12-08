@@ -118,7 +118,7 @@ class PathLike(str):
 
 def run_proofing_and_validate(
     pdf_path: str,
-    bbb_path: str
+    ref_excel_path: str
 ) -> tuple[pd.DataFrame, pd.DataFrame, Optional[pd.DataFrame], Optional[pd.DataFrame]]:
     """
     Returns: (profiles_df_raw, profiles_df_validated, toc_review_df or None, nv_errors_df or None)
@@ -129,7 +129,7 @@ def run_proofing_and_validate(
 
     Streamlit will pass:
     - pdf_path: path to a temp file containing the uploaded PDF.
-    - bbb_path: path to a temp file containing the uploaded BBB reference Excel/CSV.
+    - ref_excel_path: path to a temp file containing the uploaded BBB reference Excel/CSV.
     """
     print("\n— Step 2/3: Extracting Profiles and Running Validation —")
 
@@ -159,8 +159,8 @@ def run_proofing_and_validate(
         raise RuntimeError("proofing.process_pdf did not yield a DataFrame for Profiles.")
 
     # ---- BBB table ----
-    print(f"Loading BBB from: {bbb_path}")
-    bbb_df = nv.load_table(bbb_path)
+    print(f"Loading BBB from: {ref_excel_path}")
+    bbb_df = nv.load_table(ref_excel_path)
 
     # ---- Validation (newvalidate) ----
     print("Running newvalidate.run_checks (Profiles vs BBB)…")
@@ -613,7 +613,7 @@ def run_pipeline(
         Path to the uploaded Best Pick PDF (saved to disk by Streamlit).
     bpr_csv_path : str
         Path to the expected-order Excel/CSV used by BPRproofing.
-    bbb_path : str
+    ref_excel_path : str
         Path to the BBB reference Excel/CSV used by newvalidate.
     save_path : str
         Path where the combined Excel workbook should be written.
@@ -625,7 +625,7 @@ def run_pipeline(
 
     Typical Streamlit usage:
     - Save uploads to temp files (one PDF, one BPR ref, one BBB ref).
-    - Call run_pipeline(pdf_path, bpr_csv_path, bbb_path, save_path).
+    - Call run_pipeline(pdf_path, bpr_csv_path, ref_excel_path, save_path).
     - Read save_path back into bytes and offer as a download.
     """
     # 1) Run BPRproofing with the same selections
