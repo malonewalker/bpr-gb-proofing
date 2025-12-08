@@ -97,6 +97,7 @@ def build_tabs_keep_rows(df_pages: pd.DataFrame):
 
 # Categories to ignore for "No matching category in Listings_Split" checks
 IGNORE_TOC_ONLY_CATEGORIES = {
+    "air conditioning & heating",
     "impact windows & doors",
     "additional information",
     "faqs",
