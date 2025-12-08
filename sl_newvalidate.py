@@ -358,8 +358,8 @@ def load_table(path: str) -> pd.DataFrame:
       - .xlsx / .xls (first sheet) via openpyxl
       - .csv / .txt via pandas.read_csv
 
-    If the file has an Excel-looking extension but isn't a real Excel file,
-    we fall back to CSV parsing.
+    If the file has an Excel-looking extension but isn't a real Excel file
+    (e.g., CSV saved as .xlsx), we fall back to CSV parsing.
     """
     if not path or not isinstance(path, str):
         raise ValueError(f"load_table expected a filesystem path (str), got: {repr(path)}")
@@ -369,16 +369,16 @@ def load_table(path: str) -> pd.DataFrame:
 
     ext = os.path.splitext(path)[1].lower()
 
-    # ----- Excel path (.xlsx / .xls) -----
+    # ---------- Excel-looking extensions ----------
     if ext in [".xlsx", ".xls"]:
         try:
-            # Explicit engine avoids the “must specify an engine” error
+            # First, try as real Excel
             return pd.read_excel(path, dtype=str, engine="openpyxl")
-        except ValueError as e:
-            # This is the one you're seeing: “Excel file format cannot be determined…”
-            msg = str(e)
-            if "Excel file format cannot be determined" in msg:
-                print(f"[WARN] {msg}. Falling back to CSV parser for {path!r}.")
+        except Exception as e:
+            # This covers "File is not a zip file", "Excel file format cannot be determined", etc.
+            print(f"[WARN] Failed to read {path!r} as Excel ({ext}): {e}. Trying CSV parser instead...")
+            # Try CSV fallback (common case: CSV content with .xlsx extension)
+            try:
                 try:
                     return pd.read_csv(
                         path,
@@ -395,12 +395,14 @@ def load_table(path: str) -> pd.DataFrame:
                         na_values=[""],
                         encoding="latin-1",
                     )
-            # Any other ValueError – re-raise wrapped
-            raise RuntimeError(f"Failed to read Excel file at {path!r} ({ext}): {e}")
-        except Exception as e:
-            raise RuntimeError(f"Failed to read Excel file at {path!r} ({ext}): {e}")
+            except Exception as e2:
+                # If *both* Excel and CSV parsing fail, give a clear combined error
+                raise RuntimeError(
+                    f"Failed to read file at {path!r} ({ext}) "
+                    f"as Excel (error: {e}) and as CSV (error: {e2})"
+                )
 
-    # ----- CSV / TXT path -----
+    # ---------- Plain CSV / TXT ----------
     elif ext in [".csv", ".txt"]:
         try:
             try:
@@ -422,7 +424,6 @@ def load_table(path: str) -> pd.DataFrame:
         except Exception as e:
             raise RuntimeError(f"Failed to read delimited file at {path!r} ({ext}): {e}")
 
-    # ----- Anything else -----
+    # ---------- Anything else ----------
     else:
         raise ValueError(f"Unsupported file extension for BBB table: {ext} (path={path!r})")
-
