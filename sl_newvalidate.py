@@ -351,18 +351,78 @@ def infer_output_path(primary_path: str) -> str:
     return f"{base}_checked.xlsx"
 
 def load_table(path: str) -> pd.DataFrame:
+    """
+    Load the BBB / reference table from a filesystem path.
+
+    Supports:
+      - .xlsx / .xls (first sheet) via openpyxl
+      - .csv / .txt via pandas.read_csv
+
+    If the file has an Excel-looking extension but isn't a real Excel file,
+    we fall back to CSV parsing.
+    """
+    if not path or not isinstance(path, str):
+        raise ValueError(f"load_table expected a filesystem path (str), got: {repr(path)}")
+
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"BBB / reference file not found at path: {path}")
+
     ext = os.path.splitext(path)[1].lower()
+
+    # ----- Excel path (.xlsx / .xls) -----
     if ext in [".xlsx", ".xls"]:
         try:
-            return pd.read_excel(path, dtype=str)
+            # Explicit engine avoids the “must specify an engine” error
+            return pd.read_excel(path, dtype=str, engine="openpyxl")
+        except ValueError as e:
+            # This is the one you're seeing: “Excel file format cannot be determined…”
+            msg = str(e)
+            if "Excel file format cannot be determined" in msg:
+                print(f"[WARN] {msg}. Falling back to CSV parser for {path!r}.")
+                try:
+                    return pd.read_csv(
+                        path,
+                        dtype=str,
+                        keep_default_na=False,
+                        na_values=[""],
+                        encoding="utf-8",
+                    )
+                except UnicodeDecodeError:
+                    return pd.read_csv(
+                        path,
+                        dtype=str,
+                        keep_default_na=False,
+                        na_values=[""],
+                        encoding="latin-1",
+                    )
+            # Any other ValueError – re-raise wrapped
+            raise RuntimeError(f"Failed to read Excel file at {path!r} ({ext}): {e}")
         except Exception as e:
-            raise RuntimeError(f"Failed to read Excel file: {e}")
+            raise RuntimeError(f"Failed to read Excel file at {path!r} ({ext}): {e}")
+
+    # ----- CSV / TXT path -----
     elif ext in [".csv", ".txt"]:
         try:
-            return pd.read_csv(path, dtype=str, keep_default_na=False, na_values=[""], encoding="utf-8")
-        except UnicodeDecodeError:
-            return pd.read_csv(path, dtype=str, keep_default_na=False, na_values=[""], encoding="latin-1")
-    else:
-        raise ValueError(f"Unsupported file extension: {ext}")
+            try:
+                return pd.read_csv(
+                    path,
+                    dtype=str,
+                    keep_default_na=False,
+                    na_values=[""],
+                    encoding="utf-8",
+                )
+            except UnicodeDecodeError:
+                return pd.read_csv(
+                    path,
+                    dtype=str,
+                    keep_default_na=False,
+                    na_values=[""],
+                    encoding="latin-1",
+                )
+        except Exception as e:
+            raise RuntimeError(f"Failed to read delimited file at {path!r} ({ext}): {e}")
 
+    # ----- Anything else -----
+    else:
+        raise ValueError(f"Unsupported file extension for BBB table: {ext} (path={path!r})")
 
