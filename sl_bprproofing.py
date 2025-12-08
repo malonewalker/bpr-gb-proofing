@@ -511,15 +511,15 @@ def _safe_int_local(x):
     except Exception:
         return None
 
-def compare_orders_with_csv(target_xlsx_path: str, csv_path: str):
+def compare_orders_with_csv(target_xlsx_path: str, ref_excel_path: str):
     """
     Company-based matching between Listings_Split and expected-order CSV.
     """
-    if not os.path.isfile(csv_path):
-        print(f"[WARN] CSV not found: {csv_path}. Skipping order comparison.")
+    if not os.path.isfile(ref_excel_path):
+        print(f"[WARN] CSV not found: {ref_excel_path}. Skipping order comparison.")
         return
 
-    ref_file = pd.read_csv(csv_path)
+    ref_file = pd.read_csv(ref_excel_path)
     if "Category" not in ref_file.columns or "BPR Position" not in ref_file.columns:
         raise KeyError("CSV must contain 'Category' and 'BPR Position' columns.")
     if "PublishedName" not in ref_file.columns:
@@ -769,14 +769,14 @@ def add_errors_column_to_listings_split(xlsx_path: str):
 # --------------------------------------------------------------------
 def run_bprproofing_from_paths(
     pdf_path: str,
-    csv_path: str,
+    ref_excel_path: str,
     alias_json_path: Optional[str] = None,
 ) -> str:
     """
     Streamlit-friendly, file-based entry point.
 
     - pdf_path: path to the GB PDF
-    - csv_path: path to the expected-order CSV/Excel (for compare_orders_with_csv)
+    - ref_excel_path: path to the expected-order CSV/Excel (for compare_orders_with_csv)
     - alias_json_path: optional path to category_aliases.json
       If None, will look for 'category_aliases.json' in the same folder as this script.
 
@@ -785,11 +785,11 @@ def run_bprproofing_from_paths(
     """
     if not os.path.isfile(pdf_path):
         raise FileNotFoundError(f"PDF not found: {pdf_path}")
-    if not os.path.isfile(csv_path):
-        raise FileNotFoundError(f"Expected-order CSV not found: {csv_path}")
+    if not os.path.isfile(ref_excel_path):
+        raise FileNotFoundError(f"Expected-order CSV not found: {ref_excel_path}")
 
     print(f"[BPRproofing] Using PDF: {pdf_path}")
-    print(f"[BPRproofing] Using expected-order file: {csv_path}")
+    print(f"[BPRproofing] Using expected-order file: {ref_excel_path}")
 
     pages = extract_pdf_text(pdf_path)
     workbook_path = save_to_excel(pdf_path, pages)
@@ -1102,7 +1102,7 @@ def run_bprproofing_from_paths(
 
     # ---- CSV comparison ----
     try:
-        compare_orders_with_csv(workbook_path, csv_path)
+        compare_orders_with_csv(workbook_path, ref_excel_path)
     except PermissionError:
         raise PermissionError("Close the workbook in Excel and try again (CSV comparison stage).")
     except Exception as e:
