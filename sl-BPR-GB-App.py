@@ -26,12 +26,12 @@ def save_uploaded_file(uploaded_file, dest_path: Path):
 
 
 def main():
-    st.set_page_config(page_title="BPR Book Proofing", layout="wide")
-    st.title("BPR Book Proofing")
+    st.set_page_config(page_title="BPR Guidebook Proofing", layout="wide")
+    st.title("BPR Guidebook Proofing")
 
     st.markdown(
         """
-        This app runs the full BPR GB pipeline using **one PDF** and **one Excel/CSV**:
+        This app runs the full BPR guidebook script using **one PDF** and **one Excel/CSV**:
 
         1. Extracts & processes the **Book PDF**  
         2. Uses the **single reference Excel/CSV** for:
@@ -56,7 +56,7 @@ def main():
         )
 
     st.markdown("---")
-    run_button = st.button("Run Full Pipeline")
+    run_button = st.button("Run Proofing Script")
 
     if run_button:
         # Basic validation
