@@ -26,8 +26,8 @@ def save_uploaded_file(uploaded_file, dest_path: Path):
 
 
 def main():
-    st.set_page_config(page_title="BPR GB Proofing — Full Pipeline", layout="wide")
-    st.title("BPR GB Proofing — Full Pipeline")
+    st.set_page_config(page_title="BPR Book Proofing", layout="wide")
+    st.title("BPR Book Proofing")
 
     st.markdown(
         """
