@@ -501,9 +501,11 @@ def normalize_label_simple(s: str) -> str:
     """Lowercase + collapse spaces (including line breaks); keep symbols like '&'."""
     if not s:
         return ""
-    # Replace line breaks and other whitespace with spaces, then collapse
-    text = str(s).replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
-    return re.sub(r"\s+", " ", text.strip().lower())
+    # Replace line breaks and other whitespace with spaces, then collapse aggressively
+    text = str(s).replace("\r\n", " ").replace("\n", " ").replace("\r", " ").replace("\t", " ")
+    # Replace multiple spaces with single space and strip
+    text = re.sub(r"\s+", " ", text)
+    return text.strip().lower()
 
 def _norm_company_name(s: str) -> str:
     """
