@@ -507,6 +507,16 @@ def normalize_label_simple(s: str) -> str:
     text = re.sub(r"\s+", " ", text)
     return text.strip().lower()
 
+def clean_cell_text(val) -> str:
+    """Remove char(10) and other line breaks from Excel cell values."""
+    if not val:
+        return ""
+    # char(10) is \n, also remove other line break variants
+    text = str(val).replace("\n", " ").replace("\r", " ").replace("\r\n", " ")
+    # Collapse multiple spaces
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
 def _norm_company_name(s: str) -> str:
     """
     Normalize company names for comparison.
@@ -948,12 +958,12 @@ def run_bprproofing_from_paths(
             for r in range(2, ws_tsplit.max_row + 1):
                 front_label = ws_tsplit.cell(row=r, column=1).value
                 back_label  = ws_tsplit.cell(row=r, column=3).value
-                # Normalize line breaks immediately when reading from cells
+                # Clean char(10) and line breaks immediately when reading from cells
                 if front_label:
-                    front_label = str(front_label).replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
+                    front_label = clean_cell_text(front_label)
                 if back_label:
-                    back_label = str(back_label).replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
-                chosen_label = front_label if (front_label and str(front_label).strip()) else back_label
+                    back_label = clean_cell_text(back_label)
+                chosen_label = front_label if (front_label and front_label.strip()) else back_label
                 if not chosen_label:
                     continue
                 clean = resolve_clean_category(chosen_label, alias_map)
