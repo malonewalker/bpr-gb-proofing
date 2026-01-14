@@ -1082,15 +1082,13 @@ def run_bprproofing_from_paths(
                 if not chosen:
                     continue
                 clean_label = resolve_clean_category(chosen, alias_map)
-                # Stop checking after "Additional Information"
-                clean_label_normalized = normalize_label_simple(clean_label)
-                if clean_label_normalized == normalize_label_simple("additional information"):
-                    print("[INFO] Reached 'Additional Information' in TOC Review; stopping category checks.")
-                    break
                 # Normalize for comparison
+                clean_label_normalized = normalize_label_simple(clean_label)
                 if clean_label_normalized in listings_cats:
                     continue
-                if clean_label and clean_label.strip().lower() in IGNORE_TOC_ONLY_CATEGORIES:
+                # Check if it's in the ignore list (normalize both sides)
+                if any(clean_label_normalized == normalize_label_simple(ignore_cat) for ignore_cat in IGNORE_TOC_ONLY_CATEGORIES):
+                    print(f"[INFO] Skipping ignored category: '{clean_label}'")
                     continue
 
                 front_num_cell = ws_tsplit.cell(row=rr, column=2).value
