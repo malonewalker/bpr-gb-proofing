@@ -948,6 +948,11 @@ def run_bprproofing_from_paths(
             for r in range(2, ws_tsplit.max_row + 1):
                 front_label = ws_tsplit.cell(row=r, column=1).value
                 back_label  = ws_tsplit.cell(row=r, column=3).value
+                # Normalize line breaks immediately when reading from cells
+                if front_label:
+                    front_label = str(front_label).replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
+                if back_label:
+                    back_label = str(back_label).replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
                 chosen_label = front_label if (front_label and str(front_label).strip()) else back_label
                 if not chosen_label:
                     continue
@@ -959,8 +964,6 @@ def run_bprproofing_from_paths(
                     page_int = None
                 if clean:
                     toc_map[clean] = page_int
-
-            print(f"[DEBUG] TOC categories found: {sorted(toc_map.keys())}")
 
             if col_page is None:
                 print("[WARN] 'page' column not found in Listings_Split; skipping page check.")
@@ -982,7 +985,6 @@ def run_bprproofing_from_paths(
                     cat_key_clean = resolve_clean_category(cat_key, alias_map)
 
                     if cat_key_clean not in toc_map:
-                        print(f"[DEBUG] Category '{cat_key}' resolved to '{cat_key_clean}' - NOT in toc_map")
                         note = f"[ERROR] Category not found in TOC Review (using aliases): '{cat_key}'"
                         annotate_cell(ws_lsplit, r, notes_col_list, note)
                         append_error(
