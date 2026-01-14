@@ -56,7 +56,7 @@ def pick_text_series(df: pd.DataFrame) -> Tuple[pd.Series, str]:
 def build_tabs_keep_rows(df_pages: pd.DataFrame):
     """
     Keep ENTIRE original rows:
-      - TOC: rows with page==6 + last row from final page
+      - TOC: rows with page containing "Table of Contents" + last row from final page
       - Listings: rows where chosen text contains PHRASE (case-insensitive)
       - Profiles: all other rows
     """
@@ -67,10 +67,19 @@ def build_tabs_keep_rows(df_pages: pd.DataFrame):
     df["_row_id__"] = range(len(df))
     page_num = pd.to_numeric(df["page"], errors="coerce")
 
-    # TOC
+    # TOC: Find page(s) containing "Table of Contents"
     toc_parts = []
-    if (page_num == 6).any():
-        toc_parts.append(df.loc[page_num == 6])
+    text_series, _ = pick_text_series(df)
+    toc_pattern = re.compile(r'table\s+of\s+contents', re.IGNORECASE)
+    toc_mask = text_series.apply(lambda s: bool(toc_pattern.search(s)))
+    if toc_mask.any():
+        toc_parts.append(df.loc[toc_mask])
+        toc_page_nums = page_num.loc[toc_mask].tolist()
+        print(f"[INFO] Found 'Table of Contents' on page(s): {toc_page_nums}")
+    else:
+        print("[WARN] 'Table of Contents' not found in any page; TOC sheet may be empty.")
+    
+    # Also include last row from final page (back cover TOC)
     if page_num.notna().any():
         last_page = int(page_num.max())
         last_rows = df.loc[page_num == last_page]
