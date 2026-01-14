@@ -498,10 +498,12 @@ def annotate_cell(ws, row: int, col: int, note: str):
     cell.value = (existing + ("\n" if existing else "") + note).strip()
 
 def normalize_label_simple(s: str) -> str:
-    """Lowercase + collapse spaces; keep symbols like '&'."""
+    """Lowercase + collapse spaces (including line breaks); keep symbols like '&'."""
     if not s:
         return ""
-    return re.sub(r"\s+", " ", str(s).strip().lower())
+    # Replace line breaks and other whitespace with spaces, then collapse
+    text = str(s).replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
+    return re.sub(r"\s+", " ", text.strip().lower())
 
 def _norm_company_name(s: str) -> str:
     """
@@ -1064,7 +1066,8 @@ def run_bprproofing_from_paths(
             for r in range(2, ws_lsplit.max_row + 1):
                 cv = ws_lsplit.cell(row=r, column=col_category).value
                 if cv and str(cv).strip():
-                    listings_cats.add(str(cv).strip())
+                    # Normalize the same way as TOC categories for comparison
+                    listings_cats.add(normalize_label_simple(str(cv).strip()))
 
             try:
                 notes_col_toc
@@ -1079,7 +1082,9 @@ def run_bprproofing_from_paths(
                 if not chosen:
                     continue
                 clean_label = resolve_clean_category(chosen, alias_map)
-                if clean_label in listings_cats:
+                # Normalize for comparison
+                clean_label_normalized = normalize_label_simple(clean_label)
+                if clean_label_normalized in listings_cats:
                     continue
                 if clean_label and clean_label.strip().lower() in IGNORE_TOC_ONLY_CATEGORIES:
                     continue
