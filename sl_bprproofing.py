@@ -976,7 +976,10 @@ def run_bprproofing_from_paths(
                     if not cat_key:
                         continue
 
-                    if cat_key not in toc_map:
+                    # Resolve/normalize the Listings_Split category the same way as TOC categories
+                    cat_key_clean = resolve_clean_category(cat_key, alias_map)
+
+                    if cat_key_clean not in toc_map:
                         note = f"[ERROR] Category not found in TOC Review (using aliases): '{cat_key}'"
                         annotate_cell(ws_lsplit, r, notes_col_list, note)
                         append_error(
@@ -986,7 +989,7 @@ def run_bprproofing_from_paths(
                             page=page_int
                         )
                     else:
-                        expected_page = toc_map[cat_key]
+                        expected_page = toc_map[cat_key_clean]
                         if page_int is None or expected_page is None or page_int != expected_page:
                             note = f"[ERROR] Page mismatch for '{cat_key}' (Expected: {expected_page}, Found: {page_int})"
                             annotate_cell(ws_lsplit, r, notes_col_list, note)
