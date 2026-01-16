@@ -538,16 +538,36 @@ def _safe_int_local(x):
 def compare_orders_with_csv(target_xlsx_path: str, ref_excel_path: str):
     """
     Company-based matching between Listings_Split and expected-order CSV.
+    Recalculates BPR Position based on Oldest Signing Date within each category.
     """
     if not os.path.isfile(ref_excel_path):
         print(f"[WARN] CSV not found: {ref_excel_path}. Skipping order comparison.")
         return
 
     ref_file = pd.read_csv(ref_excel_path)
-    if "Category" not in ref_file.columns or "BPR Position" not in ref_file.columns:
-        raise KeyError("CSV must contain 'Category' and 'BPR Position' columns.")
+    if "Category" not in ref_file.columns:
+        raise KeyError("CSV must contain 'Category' column.")
     if "PublishedName" not in ref_file.columns:
         raise KeyError("CSV must contain 'PublishedName' (company name) column.")
+    
+    # Recalculate BPR Position based on Oldest Signing Date within each category
+    if "Oldest Signing Date" in ref_file.columns:
+        print("[INFO] Recalculating BPR Position based on Oldest Signing Date within each category...")
+        
+        # Convert Oldest Signing Date to datetime for proper sorting
+        ref_file["Oldest Signing Date"] = pd.to_datetime(ref_file["Oldest Signing Date"], errors='coerce')
+        
+        # Sort by Category, then by Oldest Signing Date (oldest first)
+        ref_file = ref_file.sort_values(by=["Category", "Oldest Signing Date"], ascending=[True, True])
+        
+        # Assign new sequential BPR Position within each category
+        ref_file["BPR Position"] = ref_file.groupby("Category").cumcount() + 1
+        
+        print(f"[INFO] Recalculated BPR Position for {len(ref_file)} companies across categories.")
+    else:
+        print("[WARN] 'Oldest Signing Date' column not found. Using existing BPR Position if available.")
+        if "BPR Position" not in ref_file.columns:
+            raise KeyError("CSV must contain either 'Oldest Signing Date' or 'BPR Position' column.")
 
     exp_map: Dict[Tuple[str, str], int] = {}
     for _, r in ref_file.iterrows():
