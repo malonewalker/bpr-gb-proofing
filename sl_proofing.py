@@ -594,7 +594,11 @@ def process_pdf(pdf_path: Path) -> pd.DataFrame:
             )
 
             for (y0, y1) in regions:
-                region_words = [w for w in words if y0 <= w["top"] <= y1]
+                # For the second region, use > instead of >= to avoid overlap
+                if y0 == 0:
+                    region_words = [w for w in words if y0 <= w["top"] < y1]
+                else:
+                    region_words = [w for w in words if y0 < w["top"] <= y1]
                 if not region_words:
                     continue
 
