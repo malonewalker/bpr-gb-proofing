@@ -186,6 +186,47 @@ def strip_before_toc(text: str) -> str:
     m = re.search(r'table\s+of\s+contents', text, flags=re.IGNORECASE)
     return text[m.end():].lstrip() if m else text
 
+def clean_back_toc_text(text: str) -> str:
+    """
+    Remove common header/footer/non-category text from back TOC.
+    Filters out: FREE Local Reference, HOW TO SCAN instructions, postal info, etc.
+    """
+    if not text:
+        return ""
+    
+    # Remove "FREE Local Reference" prefix and location info before first category
+    text = re.sub(r'^.*?(?=Air Conditioning|Appliance|Bathtub|Carpet|Chimney|Closet|Concrete|Deck|Door|Drain|Driveway|Electric|Fence|Foundation|Glass|Gutter|Handyman|Home|Impact|Interior|Kitchen|Landscap|Lawn|Masonry|Painting|Pest|Plumb|Pool|Pressure|Remodel|Roof|Sewer|Shower|Siding|Tree|Water|Window|Wildlife)', text, '', flags=re.IGNORECASE | re.DOTALL)
+    
+    # Remove entire QR code/scan instructions block (more aggressive)
+    text = re.sub(r'HOW\s+TO\s+SCAN[:\s]+.*?appears', '', text, flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'OPEN,?\s*AIM\s*&?\s*TAP', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'Open\s+the\s+camera.*?phone', '', text, flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'Aim\s+it\s+at\s+the.*?Flowcode', '', text, flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'Tap\s+the\s+banner.*?appears', '', text, flags=re.IGNORECASE | re.DOTALL)
+    
+    # Remove "The Best Directory" promotional text (more variations)
+    text = re.sub(r'The\s+Best\s+Directory.*?(?:FREE|Online)[\s!]*', '', text, flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'Is\s+Also\s+ONLINE!', '', text, flags=re.IGNORECASE)
+    
+    # Remove bullet points and common non-TOC phrases (handle dots and bullets)
+    text = re.sub(r'[\.\u2022\u00b7]\s*Find\s+a\s+professional', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'[\.\u2022\u00b7]\s*Learn\s+about\s+home\s+care', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'[\.\u2022\u00b7]\s*Register\s+for\s+the\s+Guarantee', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'Best\s+of\s+all,', '', text, flags=re.IGNORECASE)
+    
+    # Remove postal/mailing information (must be after other removals)
+    text = re.sub(r'PRSRT\s+STD', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'US\s+POSTAGE\s+PAID', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'Best\s+Pick\s+Reports,?\s+LLC', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'Best\s+Pick\s+Reports\s*\d{3,5}', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\d{3,5}\s+Irvine\s+Center\s+Dr.*?(?:CA|Irvine).*?(?:\d{5})?', '', text, flags=re.IGNORECASE | re.DOTALL)
+    
+    # Clean up excessive whitespace
+    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r'\s*\n\s*', '\n', text)
+    
+    return text.strip()
+
 def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
     """
     Scan the entire block and split whenever a NUMBER ends.
@@ -452,11 +493,34 @@ def load_alias_map_from_json(json_path: str) -> dict[str, str]:
     return alias_map
 
 def resolve_clean_category(label: str, alias_map: dict[str, str]) -> str:
-    """Return canonical name if label is an alias; otherwise return the trimmed label."""
+    """Return canonical name if label is an alias; otherwise return the trimmed label.
+    Also handles optional variations (e.g., with/without 'Mold' in damage restoration)."""
     if not label:
         return ""
-    key = normalize_label_simple(label)
-    return alias_map.get(key, str(label).strip())
+    key = normalize_label_simple(str(label))
+    
+    # First check direct match
+    if key in alias_map:
+        return alias_map[key]
+    
+    # Handle optional "Mold" in damage restoration categories
+    # If not found, try without "mold" or with "mold"
+    if 'mold' in key:
+        # Try removing mold to find the non-mold variant
+        key_without_mold = re.sub(r',?\s*mold,?\s*', ', ', key)
+        key_without_mold = re.sub(r'\s*,\s*', ', ', key_without_mold).strip()
+        key_without_mold = re.sub(r',\s*,', ',', key_without_mold)  # fix double commas
+        if key_without_mold in alias_map:
+            return alias_map[key_without_mold]
+    else:
+        # Try adding mold variant for categories that might have it
+        if 'water' in key and 'fire' in key and 'storm' in key:
+            # Try: "water, fire & storm" -> "water, mold, fire & storm"
+            key_with_mold = key.replace('water, fire', 'water, mold, fire')
+            if key_with_mold in alias_map:
+                return alias_map[key_with_mold]
+    
+    return str(label).strip()
 
 def _ws_header_index_map(ws) -> dict[str, int]:
     """
@@ -858,9 +922,12 @@ def run_bprproofing_from_paths(
 
             front_clean = strip_before_toc(front_raw)
             ws_toc["B2"].value = front_clean
+            
+            # Clean back TOC to remove header/footer junk
+            back_clean = clean_back_toc_text(back_raw)
 
             front_pairs = parse_pairs_split_on_numbers(front_clean)
-            back_pairs  = parse_pairs_split_on_numbers(back_raw)
+            back_pairs  = parse_pairs_split_on_numbers(back_clean)
 
             write_split_sheet(wb, front_pairs, back_pairs)
             wb.save(workbook_path)
@@ -1262,9 +1329,12 @@ def run_pipeline(pdf_bytes: bytes,
 
             front_clean = strip_before_toc(front_raw)
             ws_toc["B2"].value = front_clean
+            
+            # Clean back TOC to remove header/footer junk
+            back_clean = clean_back_toc_text(back_raw)
 
             front_pairs = parse_pairs_split_on_numbers(front_clean)
-            back_pairs  = parse_pairs_split_on_numbers(back_raw)
+            back_pairs  = parse_pairs_split_on_numbers(back_clean)
 
             write_split_sheet(wb, front_pairs, back_pairs)
             wb.save(out_path)
