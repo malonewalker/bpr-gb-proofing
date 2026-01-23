@@ -283,7 +283,6 @@ def write_split_sheet(wb, front_pairs: List[Tuple[str,int]], back_pairs: List[Tu
     ws.column_dimensions[get_column_letter(2)].width = 12
     ws.column_dimensions[get_column_letter(3)].width = 40
     ws.column_dimensions[get_column_letter(4)].width = 12
-    ws.column_dimensions[get_column_letter(4)].width = 12
 
 def norm(s: Optional[str]) -> str:
     if s is None:
