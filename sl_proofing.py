@@ -573,6 +573,48 @@ def find_first_toc_page_index(pdf) -> int:
 
 
 # =========================
+# Phone-based profile detection
+# =========================
+def find_all_phone_positions(words) -> List[Tuple[str, float]]:
+    """Find all phone numbers and their Y positions on the page."""
+    phones = []
+    for w in words:
+        m = PHONE_RE.search(w["text"])
+        if m:
+            phone_formatted = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+            phones.append((phone_formatted, w["top"]))
+    # Remove duplicates (same phone appearing multiple times)
+    seen = {}
+    for phone, y in phones:
+        if phone not in seen:
+            seen[phone] = y
+    return [(phone, y) for phone, y in seen.items()]
+
+
+def create_regions_from_phones(phone_positions: List[Tuple[str, float]], page_height: float) -> List[Tuple[float, float]]:
+    """Create regions based on phone number positions."""
+    if not phone_positions:
+        return [(0, page_height)]
+    
+    if len(phone_positions) == 1:
+        # Single profile - use whole page
+        return [(0, page_height)]
+    
+    # Sort by Y position
+    phones_sorted = sorted(phone_positions, key=lambda x: x[1])
+    
+    if len(phones_sorted) == 2:
+        # Two profiles - split between them
+        y1 = phones_sorted[0][1]
+        y2 = phones_sorted[1][1]
+        split_y = (y1 + y2) / 2.0
+        return [(0, split_y), (split_y, page_height)]
+    
+    # More than 2 phones (unusual) - just use whole page
+    return [(0, page_height)]
+
+
+# =========================
 # Main processing
 # =========================
 def process_pdf(pdf_path: Path) -> pd.DataFrame:
@@ -586,12 +628,9 @@ def process_pdf(pdf_path: Path) -> pd.DataFrame:
 
             page_header_text = get_page_header_text(page)
 
-            split_y = detect_two_profiles_split_y(words, page.height)
-            regions = (
-                [(0, page.height)]
-                if split_y is None
-                else [(0, split_y), (split_y, page.height)]
-            )
+            # Find phone numbers to determine how many profiles are on this page
+            phone_positions = find_all_phone_positions(words)
+            regions = create_regions_from_phones(phone_positions, page.height)
 
             for (y0, y1) in regions:
                 # For the second region, use > instead of >= to avoid overlap
