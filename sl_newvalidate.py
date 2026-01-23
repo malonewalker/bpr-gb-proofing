@@ -111,14 +111,16 @@ def run_checks(primary: pd.DataFrame, bbb: pd.DataFrame) -> pd.DataFrame:
     P_STARS = "Five-Star (count)"
     P_LICENSES = "Trade License Numbers"
     P_VERIFIED = "Verified Block"
+    P_PUBLISHED_NAME = "Published Name"
 
     # BBB columns
     B_BOOK_PHONE = "Book Phone Number"
     B_LICENSES = "Licenses"
     B_WC_STATUS = "WC Status"
+    B_PUBLISHED_NAME = "PublishedName"
 
-    ensure_columns(primary, [P_PHONE, P_RATING, P_STARS, P_LICENSES, P_VERIFIED])
-    ensure_columns(bbb, [B_BOOK_PHONE, B_LICENSES, B_WC_STATUS])
+    ensure_columns(primary, [P_PHONE, P_RATING, P_STARS, P_LICENSES, P_VERIFIED, P_PUBLISHED_NAME])
+    ensure_columns(bbb, [B_BOOK_PHONE, B_LICENSES, B_WC_STATUS, B_PUBLISHED_NAME])
 
     # Normalize for join
     primary["_phone_norm"] = primary[P_PHONE].fillna("").astype(str).map(normalize_phone)
@@ -132,11 +134,13 @@ def run_checks(primary: pd.DataFrame, bbb: pd.DataFrame) -> pd.DataFrame:
             continue
         bbb_lic_raw = to_clean_str(row.get(B_LICENSES, ""))
         wc_status = to_clean_str(row.get(B_WC_STATUS, ""))
+        bbb_published_name = to_clean_str(row.get(B_PUBLISHED_NAME, ""))
         bbb_lookup[phone_norm] = {
             "licenses_raw": bbb_lic_raw,
             "licenses_set": split_licenses(bbb_lic_raw),
             "wc_status": wc_status,
             "book_phone_raw": to_clean_str(row.get(B_BOOK_PHONE, "")),
+            "published_name": bbb_published_name,
         }
 
     notes_internal, notes_compare = [], []
@@ -156,6 +160,7 @@ def run_checks(primary: pd.DataFrame, bbb: pd.DataFrame) -> pd.DataFrame:
         stars = to_clean_str(row.get(P_STARS, ""))
         licenses_raw = to_clean_str(row.get(P_LICENSES, ""))
         verified_block = to_clean_str(row.get(P_VERIFIED, ""))
+        published_name = to_clean_str(row.get(P_PUBLISHED_NAME, ""))
 
         # --- Internal checks ---
         if normalize_phone(phone) == "":
@@ -177,6 +182,13 @@ def run_checks(primary: pd.DataFrame, bbb: pd.DataFrame) -> pd.DataFrame:
             bbb_lic_raw = bbb_info["licenses_raw"]
             bbb_lic_set = bbb_info["licenses_set"]
             wc_status = bbb_info["wc_status"]
+            bbb_published_name = bbb_info["published_name"]
+
+            # Check Published Name - STRICT exact match
+            if published_name != bbb_published_name:
+                issue = "published name mismatch"
+                add_note(row_notes_compare, issue)
+                row_error_items.append((issue, bbb_published_name, published_name))
 
             primary_lic_set = split_licenses(licenses_raw)
 
