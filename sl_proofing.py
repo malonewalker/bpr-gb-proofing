@@ -576,19 +576,24 @@ def find_first_toc_page_index(pdf) -> int:
 # Phone-based profile detection
 # =========================
 def find_all_phone_positions(words) -> List[Tuple[str, float]]:
-    """Find all phone numbers and their Y positions on the page."""
+    """Find all phone numbers and their Y positions on the page. Returns only the FIRST (topmost) occurrence of each unique phone."""
     phones = []
     for w in words:
         m = PHONE_RE.search(w["text"])
         if m:
             phone_formatted = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
             phones.append((phone_formatted, w["top"]))
-    # Remove duplicates (same phone appearing multiple times)
+    
+    # Keep only the FIRST (topmost) occurrence of each unique phone number
     seen = {}
     for phone, y in phones:
-        if phone not in seen:
+        if phone not in seen or y < seen[phone]:
             seen[phone] = y
-    return [(phone, y) for phone, y in seen.items()]
+    
+    result = [(phone, y) for phone, y in seen.items()]
+    # Sort by Y position
+    result.sort(key=lambda x: x[1])
+    return result
 
 
 def create_regions_from_phones(phone_positions: List[Tuple[str, float]], page_height: float) -> List[Tuple[float, float]]:
