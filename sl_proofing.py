@@ -573,50 +573,40 @@ def find_first_toc_page_index(pdf) -> int:
 
 
 # =========================
-# Phone-based profile detection
+# Profile boundary detection using "Scan QR Code" markers
 # =========================
-def find_all_phone_positions(words) -> List[Tuple[str, float]]:
-    """Find all phone numbers and their Y positions on the page. Returns only the FIRST (topmost) occurrence of each unique phone."""
-    phones = []
-    for w in words:
-        m = PHONE_RE.search(w["text"])
-        if m:
-            phone_formatted = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
-            phones.append((phone_formatted, w["top"]))
-    
-    # Keep only the FIRST (topmost) occurrence of each unique phone number
-    seen = {}
-    for phone, y in phones:
-        if phone not in seen or y < seen[phone]:
-            seen[phone] = y
-    
-    result = [(phone, y) for phone, y in seen.items()]
-    # Sort by Y position
-    result.sort(key=lambda x: x[1])
-    return result
+def find_scan_qr_positions(words) -> List[float]:
+    """Find all 'Scan QR Code' positions - these mark the END of each profile."""
+    positions = []
+    # Look through lines to find the "Scan QR Code" phrase
+    lines = group_lines_by_y(words)
+    for ln in lines:
+        if "scan qr code" in ln["text"].lower():
+            positions.append(ln["y"])
+    return sorted(positions)
 
 
-def create_regions_from_phones(phone_positions: List[Tuple[str, float]], page_height: float) -> List[Tuple[float, float]]:
-    """Create regions based on phone number positions."""
-    if not phone_positions:
+def create_regions_from_qr_markers(qr_positions: List[float], page_height: float) -> List[Tuple[float, float]]:
+    """Create regions based on 'Scan QR Code' markers. Each marker ends a profile."""
+    if not qr_positions:
+        # No QR codes found - treat as single profile
         return [(0, page_height)]
     
-    if len(phone_positions) == 1:
-        # Single profile - use whole page
-        return [(0, page_height)]
+    regions = []
+    start_y = 0
     
-    # Sort by Y position
-    phones_sorted = sorted(phone_positions, key=lambda x: x[1])
+    for qr_y in qr_positions:
+        # Each profile goes from start_y to just after the QR code
+        # Add some padding to include the QR code line itself
+        end_y = qr_y + 50  # Add padding to include QR code and any text below it
+        regions.append((start_y, end_y))
+        start_y = end_y
     
-    if len(phones_sorted) == 2:
-        # Two profiles - split between them
-        y1 = phones_sorted[0][1]
-        y2 = phones_sorted[1][1]
-        split_y = (y1 + y2) / 2.0
-        return [(0, split_y), (split_y, page_height)]
+    # If there's significant space after the last QR code, it might be another profile
+    if start_y < page_height - 100:
+        regions.append((start_y, page_height))
     
-    # More than 2 phones (unusual) - just use whole page
-    return [(0, page_height)]
+    return regions
 
 
 # =========================
@@ -633,16 +623,12 @@ def process_pdf(pdf_path: Path) -> pd.DataFrame:
 
             page_header_text = get_page_header_text(page)
 
-            # Find phone numbers to determine how many profiles are on this page
-            phone_positions = find_all_phone_positions(words)
-            regions = create_regions_from_phones(phone_positions, page.height)
+            # Find "Scan QR Code" markers to determine profile boundaries
+            qr_positions = find_scan_qr_positions(words)
+            regions = create_regions_from_qr_markers(qr_positions, page.height)
 
             for (y0, y1) in regions:
-                # For the second region, use > instead of >= to avoid overlap
-                if y0 == 0:
-                    region_words = [w for w in words if y0 <= w["top"] < y1]
-                else:
-                    region_words = [w for w in words if y0 < w["top"] <= y1]
+                region_words = [w for w in words if y0 <= w["top"] <= y1]
                 if not region_words:
                     continue
 
