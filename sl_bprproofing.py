@@ -270,14 +270,35 @@ def write_split_sheet(wb, front_pairs: List[Tuple[str,int]], back_pairs: List[Tu
     for col, h in enumerate(headers, start=1):
         ws.cell(row=1, column=col, value=h)
 
-    n = max(len(front_pairs), len(back_pairs))
+    # Filter and clean back_pairs
+    filtered_back_pairs = []
+    for cat, num in back_pairs:
+        # Skip "how to scan" entries
+        if cat.lower().startswith('how to scan'):
+            continue
+        
+        # Clean entries that start with "FREE Local Reference"
+        if cat.lower().startswith('free'):
+            # Extract everything after the location/prefix (e.g., "North Dallas", "South Austin", etc.)
+            # Pattern: FREE...!<Location>\n<CategoryName>
+            match = re.search(r'(?:FREE.*?!\s*\w+\s+\w+\s+)(.*)', cat, re.IGNORECASE | re.DOTALL)
+            if match:
+                cat = match.group(1).strip()
+            else:
+                # Fallback: just remove everything up to a capital letter followed by text
+                cat = re.sub(r'^FREE.*?(?=[A-Z][a-z])', '', cat, flags=re.IGNORECASE).strip()
+        
+        if cat:  # Only add if we have a valid category after cleaning
+            filtered_back_pairs.append((cat, num))
+    
+    n = max(len(front_pairs), len(filtered_back_pairs))
     for i in range(n):
         if i < len(front_pairs):
             ws.cell(row=i+2, column=1, value=front_pairs[i][0])
             ws.cell(row=i+2, column=2, value=front_pairs[i][1])
-        if i < len(back_pairs):
-            ws.cell(row=i+2, column=3, value=back_pairs[i][0])
-            ws.cell(row=i+2, column=4, value=back_pairs[i][1])
+        if i < len(filtered_back_pairs):
+            ws.cell(row=i+2, column=3, value=filtered_back_pairs[i][0])
+            ws.cell(row=i+2, column=4, value=filtered_back_pairs[i][1])
 
     ws.column_dimensions[get_column_letter(1)].width = 40
     ws.column_dimensions[get_column_letter(2)].width = 12
