@@ -40,6 +40,7 @@ SECTION_LABELS = [
 
 # Markers for license extraction in Verified block
 START_TL_RE = re.compile(r"verified\s+trade\s+license\(s\)\s*:?", re.I)
+START_CR_RE = re.compile(r"verified\s+contractor\s+registration\s*:?", re.I)
 END_GLI_RE  = re.compile(r"verified\s+general\s+liability", re.I)
 ANY_VERIFIED_RE = re.compile(r"^\s*verified\b", re.I)
 
@@ -292,11 +293,15 @@ def _build_verified_block(all_lines: List[str]) -> str:
 
 def _extract_between_markers(lines: List[str]) -> str:
     """
-    - Find 'Verified Trade License(s)'
+    - Find 'Verified Trade License(s)' or 'Verified Contractor Registration'
     - Capture all non-empty lines after it
     - Stop at 'Verified General Liability Insurance' (or next 'Verified …').
     """
+    # Try finding Trade License(s) first
     start_idx = next((i for i, s in enumerate(lines) if START_TL_RE.search(s)), None)
+    # If not found, try Contractor Registration as fallback
+    if start_idx is None:
+        start_idx = next((i for i, s in enumerate(lines) if START_CR_RE.search(s)), None)
     if start_idx is None:
         return ""
     end_idx = next(
