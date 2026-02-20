@@ -39,8 +39,8 @@ SECTION_LABELS = [
 ]
 
 # Markers for license extraction in Verified block
-START_TL_RE = re.compile(r"verified\s+trade\s+license\(s\)\s*:?", re.I)
-START_CR_RE = re.compile(r"verified\s+contractor\s+registration\s*:?", re.I)
+START_TL_RE = re.compile(r"verified\s+trade\s+license(?:\(s\)|s)?\b\s*:?", re.I)
+START_CR_RE = re.compile(r"verified\s+contractor\s+registration(?:s)?\b\s*:?", re.I)
 END_GLI_RE  = re.compile(r"verified\s+general\s+liability", re.I)
 ANY_VERIFIED_RE = re.compile(r"^\s*verified\b", re.I)
 
@@ -314,6 +314,14 @@ def _extract_between_markers(lines: List[str]) -> str:
             len(lines),
         )
     payload = []
+
+    start_line = lines[start_idx].strip()
+    marker_match = START_TL_RE.search(start_line) or START_CR_RE.search(start_line)
+    if marker_match:
+        same_line_payload = start_line[marker_match.end() :].strip(" :-\u2013\u2014")
+        if same_line_payload:
+            payload.append(same_line_payload)
+
     for s in lines[start_idx + 1 : end_idx]:
         t = s.strip()
         if not t:

@@ -42,6 +42,13 @@ def norm_text(s: str) -> str:
 def contains_phrase(text: str, expected_substring: str) -> bool:
     return norm_text(expected_substring) in norm_text(text)
 
+def has_exact_phrase_line(text: str, expected_phrase: str) -> bool:
+    expected = norm_text(expected_phrase)
+    if not expected:
+        return False
+    lines = [norm_text(line) for line in to_clean_str(text).splitlines() if line.strip()]
+    return expected in lines
+
 def split_licenses(raw: str) -> Set[str]:
     """Tokenize licenses; treat 'Not Required' as empty."""
     txt = to_clean_str(raw)
@@ -200,28 +207,25 @@ def run_checks(primary: pd.DataFrame, bbb: pd.DataFrame) -> pd.DataFrame:
                         verified_block
                     ))
 
-            # Trade License(s) expectation from BBB truth
+            # Trade License / Contractor Registration expectation from BBB truth
             bbb_has_license = (not is_blankish(bbb_lic_raw)) and ("not required" not in norm_text(bbb_lic_raw))
 
             if bbb_has_license:
-                # Expect Verified Trade License(s)
+                # Expect either Verified Trade License(s) or Verified Contractor Registration
                 if not (
                     contains_phrase(verified_block, "Verified Trade License(s)")
                     or contains_phrase(verified_block, "Verified Trade License")
+                    or contains_phrase(verified_block, "Verified Contractor Registration")
                 ):
                     add_note(row_notes_compare, "missing license?; review checkboxes")
                     row_error_items.append((
                         "missing license?; review checkboxes",
-                        "Verified Trade License(s)",
+                        "Verified Trade License(s) or Verified Contractor Registration",
                         verified_block
                     ))
             else:
-                # Expect Not Required
-                if not (
-                    contains_phrase(verified_block, "Trade License(s) Not Required")
-                    or contains_phrase(verified_block, "Trade License Not Required")
-                    or contains_phrase(verified_block, "Trade Licenses Not Required")
-                ):
+                # Expect Not Required (always trade-license wording)
+                if not has_exact_phrase_line(verified_block, "Trade License(s) Not Required"):
                     add_note(row_notes_compare, "expected 'Trade License(s) Not Required' in Verified Block")
                     row_error_items.append((
                         "expected 'Trade License(s) Not Required' in Verified Block",
