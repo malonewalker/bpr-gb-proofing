@@ -188,20 +188,19 @@ def strip_before_toc(text: str) -> str:
 
 def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
     """
-    Parse TOC pairs as (category, page) using a line-aware strategy.
-    This is resilient to back-page layout/header text differences.
+    Parse TOC pairs as (category, page) from line-based TOC entries.
+    Handles dot-leader variants and wrapped category lines.
     """
     if not block:
         return []
     txt = normalize_text(block)
-
-    # Normalize common leader glyphs while preserving line structure.
     txt = txt.replace("\r\n", "\n").replace("\r", "\n")
     txt = re.sub(r"[•·]", ".", txt)
     txt = re.sub(r"[–—]", "-", txt)
 
-    # Remove known non-TOC noise lines often present on the back page.
     noise_patterns = [
+        r"^table\s+of\s+contents$",
+        r"^lake\s+norman$",
         r"best\s*pick\s*reports",
         r"psrst|postage\s*paid",
         r"irvine,?\s*ca",
@@ -210,56 +209,56 @@ def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
         r"how\s*to\s*scan",
         r"free\s*local\s*reference",
     ]
-    filtered_lines: List[str] = []
+
+    # Typical TOC line: "Category .... 53"
+    toc_line_re = re.compile(r"^(.+?)(?:\s*\.{2,}\s*|\s{2,}|\s+-\s+)(\d{1,3})\s*$")
+    trailing_page_re = re.compile(r"^(.*?\D)\s*(\d{1,3})\s*$")
+
+    pairs: List[Tuple[str, int]] = []
+    seen: set[Tuple[str, int]] = set()
+    pending_cat = ""
+
     for raw_ln in txt.split("\n"):
         ln = re.sub(r"\s+", " ", raw_ln).strip()
         if not ln:
             continue
-        # OCR can prepend decorative symbols; remove them before matching.
+
         ln = re.sub(r"^[^A-Za-z0-9]+", "", ln).strip()
         if not ln:
             continue
+
         if any(re.search(pat, ln, re.I) for pat in noise_patterns):
             continue
-        filtered_lines.append(ln)
 
-    if not filtered_lines:
-        return []
+        m = toc_line_re.match(ln)
+        if not m:
+            m = trailing_page_re.match(ln)
 
-    # Flatten and start from the first likely TOC entry.
-    flat = "\n".join(filtered_lines)
-    start_entry = re.search(
-        r"[A-Za-z][A-Za-z&/,'’().+\-\s]+?(?:\.{1,}|\s{2,}|-)\s*(\d{1,3})\b",
-        flat,
-    )
-    if start_entry:
-        flat = flat[start_entry.start() :]
+        if m:
+            cat = re.sub(r"\s+", " ", m.group(1)).strip(" .-:")
+            num = int(m.group(2))
 
-    # Entry regex: category text + leader spacing/dots + page number.
-    entry_re = re.compile(
-        r"([A-Za-z][A-Za-z&/,'’().+\-\s]{2,}?)\s*(?:\.{1,}|\s{2,}|-)\s*(\d{1,3})\b"
-    )
+            if pending_cat:
+                cat = f"{pending_cat} {cat}".strip()
+                pending_cat = ""
 
-    pairs: List[Tuple[str, int]] = []
-    seen: set[Tuple[str, int]] = set()
-    for m in entry_re.finditer(flat):
-        cat = re.sub(r"\s+", " ", m.group(1)).strip(" .-:")
-        cat = re.sub(r"^[^A-Za-z0-9]+", "", cat).strip()
-        num = int(m.group(2))
+            if num <= 0 or num > 999:
+                continue
+            if len(cat) < 3:
+                continue
+            if re.fullmatch(r"\d+", cat):
+                continue
 
-        # Keep only plausible TOC page numbers and readable category text.
-        if num <= 0 or num > 999:
-            continue
-        if len(cat) < 3:
-            continue
-        if re.fullmatch(r"\d+", cat):
+            key = (cat, num)
+            if key in seen:
+                continue
+            seen.add(key)
+            pairs.append(key)
             continue
 
-        key = (cat, num)
-        if key in seen:
-            continue
-        seen.add(key)
-        pairs.append(key)
+        # Keep potential wrapped category line and join with next line that has page.
+        if re.search(r"[A-Za-z]", ln):
+            pending_cat = ln if not pending_cat else f"{pending_cat} {ln}".strip()
 
     return pairs
 
