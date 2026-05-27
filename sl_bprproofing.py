@@ -269,6 +269,15 @@ def extract_page_from_text(text: str) -> Optional[int]:
                 except ValueError:
                     return None
             break
+
+    # Fallback: some extracts place "<page> Best Pick Reports recommends..." at tail.
+    m3 = re.search(r"\b(\d{1,5})\s*Best\s*Pick\s*Reports\s*recommends\b", text, re.I)
+    if m3:
+        try:
+            return int(m3.group(1))
+        except ValueError:
+            return None
+
     return None
 
 def slice_between(text: str, start_pat: str, end_pat: str) -> str:
@@ -321,6 +330,17 @@ def extract_listing_category(text: str) -> str:
     if category:
         return category
 
+    # Fallback: category appears inline on the same line as the recommends marker.
+    m_inline = re.search(
+        r"Best\s*Pick\s*Reports\s*recommends\s*:?\s*([^\n\r]+)",
+        text,
+        re.I,
+    )
+    if m_inline:
+        inline_cat = clean_category(m_inline.group(1))
+        if inline_cat:
+            return inline_cat
+
     lines = [ln.strip() for ln in norm(text).splitlines() if ln.strip()]
     if not lines:
         return ""
@@ -328,6 +348,18 @@ def extract_listing_category(text: str) -> str:
     # Fallback: take the first non-empty line after the recommends marker line.
     marker_idx = next((i for i, ln in enumerate(lines) if PHRASE_RE.search(ln)), None)
     if marker_idx is not None:
+        marker_line = lines[marker_idx]
+        # Handle marker and category in same line: "...recommends:Category Name"
+        m_same_line = re.search(
+            r"Best\s*Pick\s*Reports\s*recommends\s*:?\s*(.+)$",
+            marker_line,
+            re.I,
+        )
+        if m_same_line:
+            same_line_cat = clean_category(m_same_line.group(1))
+            if same_line_cat:
+                return same_line_cat
+
         for nxt in lines[marker_idx + 1:]:
             if re.search(r"^Trade\s*License", nxt, re.I):
                 break
