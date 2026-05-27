@@ -622,6 +622,36 @@ def create_regions_from_qr_markers(qr_positions: List[float], page_height: float
     return regions
 
 
+def is_likely_profile_region(region_words: List[dict]) -> bool:
+    """
+    Guardrail to skip non-profile filler regions.
+    A profile should contain Services Offered plus at least two profile signals.
+    """
+    if not region_words:
+        return False
+
+    text = " ".join(w.get("text", "") for w in region_words)
+    text_l = text.lower()
+
+    if "table of contents" in text_l:
+        return False
+
+    has_services = "services offered" in text_l
+    has_rating = (
+        "homeowner satisfaction results" in text_l
+        or "rating:" in text_l
+        or "out of 5" in text_l
+    )
+    has_verified = "verified" in text_l
+    has_phone = bool(re.search(r"\b\d{3}[\s\-.–]\d{3}[\s\-.–]\d{4}\b", text))
+
+    if not has_services:
+        return False
+
+    signal_count = sum([has_rating, has_verified, has_phone])
+    return signal_count >= 2
+
+
 # =========================
 # Main processing
 # =========================
@@ -645,8 +675,7 @@ def process_pdf(pdf_path: Path) -> pd.DataFrame:
                 if not region_words:
                     continue
 
-                preview = " ".join(w["text"] for w in region_words[:300]).lower()
-                if "services offered" not in preview:
+                if not is_likely_profile_region(region_words):
                     continue
 
                 rec = extract_profile_from_region(region_words, page, page_header_text)
