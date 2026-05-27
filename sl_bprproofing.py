@@ -215,6 +215,10 @@ def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
         ln = re.sub(r"\s+", " ", raw_ln).strip()
         if not ln:
             continue
+        # OCR can prepend decorative symbols; remove them before matching.
+        ln = re.sub(r"^[^A-Za-z0-9]+", "", ln).strip()
+        if not ln:
+            continue
         if any(re.search(pat, ln, re.I) for pat in noise_patterns):
             continue
         filtered_lines.append(ln)
@@ -225,7 +229,7 @@ def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
     # Flatten and start from the first likely TOC entry.
     flat = "\n".join(filtered_lines)
     start_entry = re.search(
-        r"[A-Za-z][A-Za-z&/,'()\-\s]+?(?:\.{2,}|\s{2,}|-)\s*(\d{1,3})\b",
+        r"[A-Za-z][A-Za-z&/,'’().+\-\s]+?(?:\.{1,}|\s{2,}|-)\s*(\d{1,3})\b",
         flat,
     )
     if start_entry:
@@ -233,13 +237,14 @@ def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
 
     # Entry regex: category text + leader spacing/dots + page number.
     entry_re = re.compile(
-        r"([A-Za-z][A-Za-z&/,'()\-\s]{2,}?)\s*(?:\.{2,}|\s{2,}|-)\s*(\d{1,3})\b"
+        r"([A-Za-z][A-Za-z&/,'’().+\-\s]{2,}?)\s*(?:\.{1,}|\s{2,}|-)\s*(\d{1,3})\b"
     )
 
     pairs: List[Tuple[str, int]] = []
     seen: set[Tuple[str, int]] = set()
     for m in entry_re.finditer(flat):
         cat = re.sub(r"\s+", " ", m.group(1)).strip(" .-:")
+        cat = re.sub(r"^[^A-Za-z0-9]+", "", cat).strip()
         num = int(m.group(2))
 
         # Keep only plausible TOC page numbers and readable category text.
@@ -268,14 +273,42 @@ def write_split_sheet(wb, front_pairs: List[Tuple[str,int]], back_pairs: List[Tu
     for col, h in enumerate(headers, start=1):
         ws.cell(row=1, column=col, value=h)
 
-    n = max(len(front_pairs), len(back_pairs))
-    for i in range(n):
-        if i < len(front_pairs):
-            ws.cell(row=i+2, column=1, value=front_pairs[i][0])
-            ws.cell(row=i+2, column=2, value=front_pairs[i][1])
-        if i < len(back_pairs):
-            ws.cell(row=i+2, column=3, value=back_pairs[i][0])
-            ws.cell(row=i+2, column=4, value=back_pairs[i][1])
+    # Align rows by (page number, occurrence index) so one missing category
+    # does not shift all subsequent rows out of alignment.
+    front_map: Dict[Tuple[int, int], str] = {}
+    back_map: Dict[Tuple[int, int], str] = {}
+
+    front_seen_per_page: Dict[int, int] = {}
+    back_seen_per_page: Dict[int, int] = {}
+
+    row_keys: List[Tuple[int, int]] = []
+
+    for cat, num in front_pairs:
+        occ = front_seen_per_page.get(num, 0) + 1
+        front_seen_per_page[num] = occ
+        key = (num, occ)
+        front_map[key] = cat
+        row_keys.append(key)
+
+    for cat, num in back_pairs:
+        occ = back_seen_per_page.get(num, 0) + 1
+        back_seen_per_page[num] = occ
+        key = (num, occ)
+        back_map[key] = cat
+        if key not in row_keys:
+            row_keys.append(key)
+
+    for i, key in enumerate(row_keys, start=2):
+        page_num, _occ = key
+        front_cat = front_map.get(key)
+        back_cat = back_map.get(key)
+
+        if front_cat is not None:
+            ws.cell(row=i, column=1, value=front_cat)
+            ws.cell(row=i, column=2, value=page_num)
+        if back_cat is not None:
+            ws.cell(row=i, column=3, value=back_cat)
+            ws.cell(row=i, column=4, value=page_num)
 
     ws.column_dimensions[get_column_letter(1)].width = 40
     ws.column_dimensions[get_column_letter(2)].width = 12
