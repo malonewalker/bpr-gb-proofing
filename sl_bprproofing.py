@@ -9,7 +9,8 @@ from openpyxl.utils import get_column_letter
 from typing import List, Optional, Tuple, Dict, Any
 import json
 
-PHRASE = "Best Pick Reports recommends:"         # for Listings (case-insensitive)
+PHRASE = "Best Pick Reports recommends"          # for Listings (case-insensitive)
+PHRASE_RE = re.compile(r"best\s*pick\s*reports\s*recommends\s*:?", re.IGNORECASE)
 TEXT_COL_CANDIDATES = ["text", "Text", "TEXT"]   # preferred column(s) to search
 
 def extract_pdf_text(pdf_path: str):
@@ -90,8 +91,7 @@ def build_tabs_keep_rows(df_pages: pd.DataFrame):
 
     # Listings
     text_series, used_col = pick_text_series(df)
-    pat = re.compile(re.escape(PHRASE), re.IGNORECASE)
-    listings_mask = text_series.apply(lambda s: bool(pat.search(s)))
+    listings_mask = text_series.apply(lambda s: bool(PHRASE_RE.search(str(s))))
     df_listings = df.loc[listings_mask].copy()
 
     # Profiles
@@ -303,6 +303,44 @@ def clean_category(s: str) -> str:
 def clean_license_expl(s: str) -> str:
     return s.strip()
 
+def extract_listing_category(text: str) -> str:
+    """
+    Extract category text from a Listings row with resilient fallbacks.
+    Handles minor punctuation and label variations from PDF extraction.
+    """
+    if not text:
+        return ""
+
+    # Primary path: between recommends marker and trade license marker.
+    category_raw = slice_between(
+        text,
+        r"Best\s*Pick\s*Reports\s*recommends\s*:?\s*",
+        r"Trade\s*License(?:\s*Information)?",
+    )
+    category = clean_category(category_raw)
+    if category:
+        return category
+
+    lines = [ln.strip() for ln in norm(text).splitlines() if ln.strip()]
+    if not lines:
+        return ""
+
+    # Fallback: take the first non-empty line after the recommends marker line.
+    marker_idx = next((i for i, ln in enumerate(lines) if PHRASE_RE.search(ln)), None)
+    if marker_idx is not None:
+        for nxt in lines[marker_idx + 1:]:
+            if re.search(r"^Trade\s*License", nxt, re.I):
+                break
+            if re.search(r"^Scan\s*for\s*additional\s*educational\s*content", nxt, re.I):
+                break
+            if re.search(r"^Common\b", nxt, re.I):
+                break
+            candidate = clean_category(nxt)
+            if candidate:
+                return candidate
+
+    return ""
+
 def ratings_entries_from_tail(tail: str) -> List[str]:
     """Entries start after '■' and end at 'as a Best Pick' (inclusive)."""
     if not tail:
@@ -322,10 +360,7 @@ def process_listing_row(row: pd.Series) -> List[Dict[str, Any]]:
     if page_from_text is not None:
         original["page"] = page_from_text
 
-    category_raw = slice_between(
-        text, r"Best\s*Pick\s*Reports\s*recommends\s*:\s*", r"Trade\s*License\s*Information"
-    )
-    category = clean_category(category_raw)
+    category = extract_listing_category(text)
 
     license_expl = slice_between(
         text, r"Trade\s*License\s*Information", r"Scan\s*for\s*additional\s*educational\s*content"
