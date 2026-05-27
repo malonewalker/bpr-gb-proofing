@@ -188,35 +188,74 @@ def strip_before_toc(text: str) -> str:
 
 def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
     """
-    Scan the entire block and split whenever a NUMBER ends.
-    Only accept numbers that look like TOC page refs:
-      - preceded nearby (within ~40 chars) by dot leaders / dashes / or >=2 spaces.
+    Parse TOC pairs as (category, page) using a line-aware strategy.
+    This is resilient to back-page layout/header text differences.
     """
     if not block:
         return []
     txt = normalize_text(block)
 
-    txt = re.sub(r'[•·]', '.', txt)
-    txt = re.sub(r'\.{2,}', '  ', txt)   # dot leaders -> double space
-    txt = re.sub(r'[–—]+', '-', txt)
+    # Normalize common leader glyphs while preserving line structure.
+    txt = txt.replace("\r\n", "\n").replace("\r", "\n")
+    txt = re.sub(r"[•·]", ".", txt)
+    txt = re.sub(r"[–—]", "-", txt)
+
+    # Remove known non-TOC noise lines often present on the back page.
+    noise_patterns = [
+        r"best\s*pick\s*reports",
+        r"psrst|postage\s*paid",
+        r"irvine,?\s*ca",
+        r"www\.",
+        r"certified\s*chain\s*of\s*custody",
+        r"how\s*to\s*scan",
+        r"free\s*local\s*reference",
+    ]
+    filtered_lines: List[str] = []
+    for raw_ln in txt.split("\n"):
+        ln = re.sub(r"\s+", " ", raw_ln).strip()
+        if not ln:
+            continue
+        if any(re.search(pat, ln, re.I) for pat in noise_patterns):
+            continue
+        filtered_lines.append(ln)
+
+    if not filtered_lines:
+        return []
+
+    # Flatten and start from the first likely TOC entry.
+    flat = "\n".join(filtered_lines)
+    start_entry = re.search(
+        r"[A-Za-z][A-Za-z&/,'()\-\s]+?(?:\.{2,}|\s{2,}|-)\s*(\d{1,3})\b",
+        flat,
+    )
+    if start_entry:
+        flat = flat[start_entry.start() :]
+
+    # Entry regex: category text + leader spacing/dots + page number.
+    entry_re = re.compile(
+        r"([A-Za-z][A-Za-z&/,'()\-\s]{2,}?)\s*(?:\.{2,}|\s{2,}|-)\s*(\d{1,3})\b"
+    )
 
     pairs: List[Tuple[str, int]] = []
-    last_end = 0
+    seen: set[Tuple[str, int]] = set()
+    for m in entry_re.finditer(flat):
+        cat = re.sub(r"\s+", " ", m.group(1)).strip(" .-:")
+        num = int(m.group(2))
 
-    for m in re.finditer(r'(\d{1,5})', txt):
-        num = int(m.group(1))
-        window_start = max(0, m.start() - 40)
-        before = txt[window_start:m.start()]
-        if not re.search(r'(?:\s{2,}|-+)', before):
-            continue  # not a TOC-like number
+        # Keep only plausible TOC page numbers and readable category text.
+        if num <= 0 or num > 999:
+            continue
+        if len(cat) < 3:
+            continue
+        if re.fullmatch(r"\d+", cat):
+            continue
 
-        cat_chunk = txt[last_end:m.start()]
-        cat = re.sub(r'[\s\.\-]+$', '', cat_chunk).strip()
-        if cat:
-            pairs.append((cat, num))
-            last_end = m.end()
-        else:
-            last_end = m.end()
+        key = (cat, num)
+        if key in seen:
+            continue
+        seen.add(key)
+        pairs.append(key)
+
     return pairs
 
 def write_split_sheet(wb, front_pairs: List[Tuple[str,int]], back_pairs: List[Tuple[str,int]]):
