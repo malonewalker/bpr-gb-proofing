@@ -42,6 +42,14 @@ def norm_text(s: str) -> str:
 def contains_phrase(text: str, expected_substring: str) -> bool:
     return norm_text(expected_substring) in norm_text(text)
 
+def contains_normalized_token_phrase(text: str, expected_phrase: str) -> bool:
+    """
+    Match phrases after removing punctuation and odd PDF whitespace.
+    Useful for badges like "Trade License(s) Not Required", which can be
+    extracted with leading thin spaces or glued to nearby rating text.
+    """
+    return normalize_token(expected_phrase) in normalize_token(text)
+
 def has_exact_phrase_line(text: str, expected_phrase: str) -> bool:
     expected = norm_text(expected_phrase)
     if not expected:
@@ -225,7 +233,7 @@ def run_checks(primary: pd.DataFrame, bbb: pd.DataFrame) -> pd.DataFrame:
                     ))
             else:
                 # Expect Not Required (always trade-license wording)
-                if not has_exact_phrase_line(verified_block, "Trade License(s) Not Required"):
+                if not contains_normalized_token_phrase(verified_block, "Trade License(s) Not Required"):
                     add_note(row_notes_compare, "expected 'Trade License(s) Not Required' in Verified Block")
                     row_error_items.append((
                         "expected 'Trade License(s) Not Required' in Verified Block",

@@ -622,6 +622,65 @@ def create_regions_from_qr_markers(qr_positions: List[float], page_height: float
     return regions
 
 
+def find_profile_start_positions(words) -> List[float]:
+    """
+    Find profile starts from company header lines containing a phone number.
+    This is more reliable than QR markers for layouts where Rating/Verified
+    badges appear after the QR call-to-action.
+    """
+    positions = []
+    lines = group_lines_by_y(words)
+
+    for ln in lines:
+        text = ln["text"].strip()
+        if not PHONE_RE.search(text):
+            continue
+
+        text_l = text.lower()
+        if any(
+            marker in text_l
+            for marker in (
+                "scan qr",
+                "or call",
+                "for service",
+                "rating:",
+                "homeowner satisfaction",
+                "trade license",
+                "verified",
+            )
+        ):
+            continue
+
+        name_part = PHONE_RE.split(text, maxsplit=1)[0].strip(" :-\u2013\u2014")
+        if len(name_part) < 3 or not re.search(r"[A-Za-z0-9]", name_part):
+            continue
+        if any(lbl.lower() in text_l for lbl in SECTION_LABELS):
+            continue
+
+        positions.append(ln["y"])
+
+    deduped: List[float] = []
+    for y in sorted(positions):
+        if not deduped or abs(y - deduped[-1]) > 8:
+            deduped.append(y)
+    return deduped
+
+
+def create_regions_from_profile_starts(start_positions: List[float], page_height: float) -> List[Tuple[float, float]]:
+    """Create profile regions from detected company header y-positions."""
+    if not start_positions:
+        return []
+
+    starts = sorted(start_positions)
+    regions: List[Tuple[float, float]] = []
+    for idx, start_y in enumerate(starts):
+        y0 = max(0, start_y - 5)
+        y1 = starts[idx + 1] - 5 if idx + 1 < len(starts) else page_height
+        if y1 - y0 > 40:
+            regions.append((y0, y1))
+    return regions
+
+
 def is_likely_profile_region(region_words: List[dict]) -> bool:
     """
     Guardrail to skip non-profile filler regions.
@@ -666,9 +725,14 @@ def process_pdf(pdf_path: Path) -> pd.DataFrame:
 
             page_header_text = get_page_header_text(page)
 
-            # Find "Scan QR Code" markers to determine profile boundaries
-            qr_positions = find_scan_qr_positions(words)
-            regions = create_regions_from_qr_markers(qr_positions, page.height)
+            # Prefer company header lines as profile boundaries. QR markers can
+            # occur before Rating/Verified badges, which would split the license
+            # block into the next company region.
+            profile_starts = find_profile_start_positions(words)
+            regions = create_regions_from_profile_starts(profile_starts, page.height)
+            if not regions:
+                qr_positions = find_scan_qr_positions(words)
+                regions = create_regions_from_qr_markers(qr_positions, page.height)
 
             for (y0, y1) in regions:
                 region_words = [w for w in words if y0 <= w["top"] <= y1]
