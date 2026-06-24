@@ -186,6 +186,22 @@ def strip_before_toc(text: str) -> str:
     m = re.search(r'table\s+of\s+contents', text, flags=re.IGNORECASE)
     return text[m.end():].lstrip() if m else text
 
+def clean_toc_line(raw_line: str) -> str:
+    """
+    Clean one extracted TOC line without removing category punctuation.
+    Wrapped TOC text can put meaningful leading characters on the next line,
+    e.g. "Window\n& Door Replacement". Keep those characters.
+    """
+    ln = str(raw_line).strip()
+    if not ln:
+        return ""
+
+    # Remove visual bullets/dot-leader fragments at the start of a line, but
+    # keep category punctuation such as &, /, +, apostrophes, and parentheses.
+    ln = re.sub(r"^[■\s]+", "", ln).strip()
+    ln = re.sub(r"^[.]+\s*(?=[A-Za-z0-9&/+('’])", "", ln).strip()
+    return ln
+
 def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
     """
     Parse TOC pairs as repeating entries:
@@ -206,26 +222,27 @@ def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
         r"^table\s+of\s+contents$",
         r"^lake\s+norman$",
         r"best\s*pick\s*reports",
-        r"psrst|postage\s*paid",
+        r"prsrt|postage\s*paid|us\s*postage",
         r"irvine,?\s*ca",
+        r"^\d+\s+irvine\s+center",
         r"www\.",
         r"certified\s*chain\s*of\s*custody",
         r"how\s*to\s*scan",
         r"open\s+the\s+camera",
+        r"voice\s+assistant",
         r"flowcode",
         r"directory\s+is\s+also\s+online",
         r"find\s+a\s+professional",
         r"learn\s+about\s+home\s+care",
         r"register\s+for\s+the\s+guarantee",
         r"free\s*local\s*reference",
+        r"best\s+of\s+all",
+        r"it['’]?\s*s\s+free",
     ]
 
     cleaned_lines: List[str] = []
     for raw_ln in txt.split("\n"):
-        ln = re.sub(r"\s+", " ", raw_ln).strip()
-        if not ln:
-            continue
-        ln = re.sub(r"^[^A-Za-z0-9]+", "", ln).strip()
+        ln = clean_toc_line(raw_ln)
         if not ln:
             continue
         if any(re.search(pat, ln, re.I) for pat in noise_patterns):
@@ -237,12 +254,15 @@ def parse_pairs_split_on_numbers(block: str) -> List[Tuple[str, int]]:
 
     # Flatten to enable repeated pattern extraction regardless of line breaks.
     flat = " ".join(cleaned_lines)
-    flat = re.sub(r"\s+", " ", flat).strip()
+    flat = flat.strip()
 
     # Category + leader + page, repeating across the full TOC text.
-    # Supports dot leaders, long spacing, or dash leaders.
+    # Supports dot leaders, long spacing, dash leaders, or a plain trailing
+    # page number when extraction has dropped the visible leader.
     entry_re = re.compile(
-        r"([A-Za-z][A-Za-z&/,'’().+\-\s]{2,}?)\s*(?:\.{2,}|\s{2,}|-+)\s*(\d{1,3})(?=\s+[A-Za-z]|$)"
+        r"([A-Za-z0-9][A-Za-z0-9&/,'’().+\-\s]{2,}?)"
+        r"\s*(?:\.{2,}|\s{2,}|-+|\s+(?=\d{1,3}(?:\s+[A-Za-z0-9]|$)))"
+        r"\s*(\d{1,3})(?=\s+[A-Za-z0-9]|$)"
     )
 
     pairs: List[Tuple[str, int]] = []
@@ -958,6 +978,7 @@ def run_bprproofing_from_paths(
     pdf_path: str,
     ref_excel_path: str,
     alias_json_path: Optional[str] = None,
+    keep_raw_sheets: bool = False,
 ) -> str:
     """
     Streamlit-friendly, file-based entry point.
@@ -966,6 +987,8 @@ def run_bprproofing_from_paths(
     - ref_excel_path: path to the expected-order CSV/Excel (for compare_orders_with_csv)
     - alias_json_path: optional path to category_aliases.json
       If None, will look for 'category_aliases.json' in the same folder as this script.
+    - keep_raw_sheets: if True, preserve Pages/Summary/TOC/Listings/Profiles
+      for local debugging.
 
     Returns:
         Path to the final updated workbook (same folder as the PDF).
@@ -1317,15 +1340,18 @@ def run_bprproofing_from_paths(
     except Exception as e:
         print(f"[WARN] Adding ERRORS column skipped due to error: {e}")
 
-    # ---- Delete original sheets ----
-    try:
-        sheets_to_delete = ["Pages", "Summary", "TOC", "Listings", "Profiles"]
-        delete_sheets(workbook_path, sheets_to_delete)
-        print(f"[OK] Deleted {', '.join(sheets_to_delete)} from {workbook_path}")
-    except PermissionError:
-        raise PermissionError("Close the workbook in Excel and try again (deleting sheets).")
-    except Exception as e:
-        print(f"[WARN] Could not delete sheets: {e}")
+    # ---- Delete original sheets unless debugging ----
+    if keep_raw_sheets:
+        print("[INFO] Keeping raw sheets for debugging: Pages, Summary, TOC, Listings, Profiles")
+    else:
+        try:
+            sheets_to_delete = ["Pages", "Summary", "TOC", "Listings", "Profiles"]
+            delete_sheets(workbook_path, sheets_to_delete)
+            print(f"[OK] Deleted {', '.join(sheets_to_delete)} from {workbook_path}")
+        except PermissionError:
+            raise PermissionError("Close the workbook in Excel and try again (deleting sheets).")
+        except Exception as e:
+            print(f"[WARN] Could not delete sheets: {e}")
 
     print(f"[OK] Updated workbook: {workbook_path}")
     print(f"  Used column for Listings search: {used_col}")
@@ -1337,6 +1363,7 @@ def main(
     pdf_path: str,
     ref_excel_path: str,
     alias_json_path: Optional[str] = None,
+    keep_raw_sheets: bool = False,
 ) -> str:
     """
     Entry point used by bpr_pipeline.run_bprproofing_inprocess(...).
@@ -1351,6 +1378,7 @@ def main(
         pdf_path=pdf_path,
         ref_excel_path=ref_excel_path,
         alias_json_path=alias_json_path,
+        keep_raw_sheets=keep_raw_sheets,
     )
 
 # --------------------------------------------------------------------
