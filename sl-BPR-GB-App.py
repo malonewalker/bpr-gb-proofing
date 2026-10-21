@@ -15,6 +15,7 @@ from pathlib import Path
 import streamlit as st
 
 import bpr_pipeline  # <-- this is the file with run_pipeline()
+from printerproof import run_printer_proof
 
 
 def save_uploaded_file(uploaded_file, dest_path: Path):
@@ -23,6 +24,78 @@ def save_uploaded_file(uploaded_file, dest_path: Path):
     """
     with open(dest_path, "wb") as f:
         f.write(uploaded_file.read())
+
+
+def run_printer_proof_ui(pdf_file, ref_file):
+    """Run the printer-proof scan, optionally merging the existing BPR checks."""
+    if pdf_file is None:
+        st.error("Please upload a PDF before running the printer-proof scan.")
+        return
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir_path = Path(tmpdir)
+        pdf_stem = Path(pdf_file.name).stem
+        pdf_path = tmpdir_path / f"{pdf_stem}.pdf"
+        save_uploaded_file(pdf_file, pdf_path)
+
+        app_workbook = None
+        app_note = ""
+        if ref_file is not None:
+            ref_path = tmpdir_path / "reference.xlsx"
+            save_uploaded_file(ref_file, ref_path)
+            app_workbook = tmpdir_path / f"{pdf_stem}_BPR_Combined.xlsx"
+            with st.spinner("Running BPR proofing script (vs BBB file)..."):
+                try:
+                    bpr_pipeline.run_pipeline(
+                        pdf_path=str(pdf_path),
+                        ref_excel_path=str(ref_path),
+                        save_path=str(app_workbook),
+                    )
+                except Exception as e:
+                    st.error(
+                        "The BPR proofing script failed; running the printer-proof "
+                        "scan on its own."
+                    )
+                    st.exception(e)
+                    app_workbook = None
+                    app_note = (
+                        "BPR proofing script FAILED on this run — see error above"
+                    )
+        else:
+            st.info(
+                "No BBB file uploaded: running the printer-proof scan only. "
+                "Upload the BBB file too to get both sets of checks in one workbook."
+            )
+
+        with st.spinner(
+            "Running printer-proof scan (page order, QR codes, ratings, ...). "
+            "About 1 minute per 40 pages."
+        ):
+            try:
+                out_path = run_printer_proof(
+                    pdf_path=str(pdf_path),
+                    out_dir=str(tmpdir_path / "printerproof"),
+                    app_workbook=str(app_workbook) if app_workbook else None,
+                    brand="BPR",
+                    app_note=app_note,
+                )
+            except Exception as e:
+                st.error("The printer-proof scan failed.")
+                st.exception(e)
+                return
+
+        with open(out_path, "rb") as f:
+            data = f.read()
+
+    st.success(
+        "Printer-proof scan complete. Open the Read me tab first, then Errors and Coverage."
+    )
+    st.download_button(
+        label="Download Proof Workbook",
+        data=data,
+        file_name=Path(out_path).name,
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
 
 
 def main():
@@ -38,6 +111,12 @@ def main():
            - Expected order / Listings checks  
            - BBB / validation logic  
         3. Combines everything into **one Excel workbook** with a unified **Errors** tab.
+
+        **Printer-proof scan** (second button) runs the pre-printer checks on the same PDF —
+        page order and page count, QR codes, ratings vs star histograms, Quick Reference Sheet,
+        licence pairing, apostrophes and text tracking — and adds the results to the same
+        **Errors** tab plus a **Coverage** tab. The BBB file is optional for this scan; with it,
+        the app's own checks run first and the two are merged.
         """
     )
 
@@ -56,7 +135,15 @@ def main():
         )
 
     st.markdown("---")
-    run_button = st.button("Run Proofing Script")
+    btn_col1, btn_col2 = st.columns(2)
+    with btn_col1:
+        run_button = st.button("Run Proofing Script")
+    with btn_col2:
+        pp_button = st.button("Run Printer-Proof Scan")
+
+    if pp_button:
+        run_printer_proof_ui(pdf_file, ref_file)
+        return
 
     if run_button:
         # Basic validation
