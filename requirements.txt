@@ -1,7 +1,0 @@
-streamlit
-pandas
-openpyxl
-PyPDF2
-pdfplumber
-opencv-python-headless
-numpy
