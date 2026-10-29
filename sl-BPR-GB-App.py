@@ -26,10 +26,12 @@ def save_uploaded_file(uploaded_file, dest_path: Path):
         f.write(uploaded_file.read())
 
 
-def run_printer_proof_ui(pdf_file, ref_file):
-    """Run the printer-proof scan, optionally merging the existing BPR checks."""
-    if pdf_file is None:
-        st.error("Please upload a PDF before running the printer-proof scan.")
+def run_combined_proofing_ui(pdf_file, ref_file):
+    """Run both proofing scripts and return their combined workbook."""
+    if pdf_file is None or ref_file is None:
+        st.error(
+            "Please upload both the Book PDF and BBB file before running proofing."
+        )
         return
 
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -38,34 +40,27 @@ def run_printer_proof_ui(pdf_file, ref_file):
         pdf_path = tmpdir_path / f"{pdf_stem}.pdf"
         save_uploaded_file(pdf_file, pdf_path)
 
-        app_workbook = None
+        ref_suffix = Path(ref_file.name).suffix.lower()
+        ref_path = tmpdir_path / f"reference{ref_suffix}"
+        save_uploaded_file(ref_file, ref_path)
+
+        app_workbook = tmpdir_path / f"{pdf_stem}_BPR_Combined.xlsx"
         app_note = ""
-        if ref_file is not None:
-            ref_path = tmpdir_path / "reference.xlsx"
-            save_uploaded_file(ref_file, ref_path)
-            app_workbook = tmpdir_path / f"{pdf_stem}_BPR_Combined.xlsx"
-            with st.spinner("Running BPR proofing script (vs BBB file)..."):
-                try:
-                    bpr_pipeline.run_pipeline(
-                        pdf_path=str(pdf_path),
-                        ref_excel_path=str(ref_path),
-                        save_path=str(app_workbook),
-                    )
-                except Exception as e:
-                    st.error(
-                        "The BPR proofing script failed; running the printer-proof "
-                        "scan on its own."
-                    )
-                    st.exception(e)
-                    app_workbook = None
-                    app_note = (
-                        "BPR proofing script FAILED on this run — see error above"
-                    )
-        else:
-            st.info(
-                "No BBB file uploaded: running the printer-proof scan only. "
-                "Upload the BBB file too to get both sets of checks in one workbook."
-            )
+        with st.spinner("Running BPR proofing script (vs BBB file)..."):
+            try:
+                bpr_pipeline.run_pipeline(
+                    pdf_path=str(pdf_path),
+                    ref_excel_path=str(ref_path),
+                    save_path=str(app_workbook),
+                )
+            except Exception as e:
+                st.error(
+                    "The BPR proofing script failed; the printer-proof scan will "
+                    "still run and record that failure in its workbook."
+                )
+                st.exception(e)
+                app_workbook = None
+                app_note = "BPR proofing script FAILED on this run — see error above"
 
         with st.spinner(
             "Running printer-proof scan (page order, QR codes, ratings, ...). "
@@ -112,11 +107,11 @@ def main():
            - BBB / validation logic  
         3. Combines everything into **one Excel workbook** with a unified **Errors** tab.
 
-        **Printer-proof scan** (second button) runs the pre-printer checks on the same PDF —
+        The same run also performs the **printer-proof scan** on the PDF —
         page order and page count, QR codes, ratings vs star histograms, Quick Reference Sheet,
         licence pairing, apostrophes and text tracking — and adds the results to the same
-        **Errors** tab plus a **Coverage** tab. The BBB file is optional for this scan; with it,
-        the app's own checks run first and the two are merged.
+        **Errors** tab plus a **Coverage** tab. Both uploaded files are required before the
+        combined proofing run can start.
         """
     )
 
@@ -135,71 +130,22 @@ def main():
         )
 
     st.markdown("---")
-    btn_col1, btn_col2 = st.columns(2)
-    with btn_col1:
-        run_button = st.button("Run Proofing Script")
-    with btn_col2:
-        pp_button = st.button("Run Printer-Proof Scan")
+    inputs_ready = pdf_file is not None and ref_file is not None
+    run_button = st.button(
+        "Run Both Proofing Scripts",
+        disabled=not inputs_ready,
+        help=(
+            "Upload both the Book PDF and BBB file to enable proofing."
+            if not inputs_ready
+            else "Run BPR validation and the printer-proof scan."
+        ),
+    )
 
-    if pp_button:
-        run_printer_proof_ui(pdf_file, ref_file)
-        return
+    if not inputs_ready:
+        st.caption("Upload both required files to enable the proofing run.")
 
     if run_button:
-        # Basic validation
-        if pdf_file is None or ref_file is None:
-            st.error("Please upload **both** a PDF and a reference Excel/CSV file before running the pipeline.")
-            return
-
-        # Use a temporary directory for all intermediate files
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmpdir_path = Path(tmpdir)
-
-            # Construct paths for the inputs and output
-            pdf_path = tmpdir_path / "input.pdf"
-            ref_path = tmpdir_path / "reference.xlsx"  # can be CSV too; name is just for convenience
-
-            # Use the PDF's name to build a friendly output filename
-            pdf_stem = Path(pdf_file.name).stem
-            out_path = tmpdir_path / f"{pdf_stem}_BPR_Combined.xlsx"
-
-            # Save uploads
-            save_uploaded_file(pdf_file, pdf_path)
-            save_uploaded_file(ref_file, ref_path)
-
-            # Run the pipeline
-            with st.spinner("Running BPR GB pipeline..."):
-                try:
-                    # NOTE:
-                    # Update bpr_pipeline.run_pipeline to accept this new signature:
-                    #   run_pipeline(pdf_path: str, ref_excel_path: str, save_path: str) -> str
-                    final_path_str = bpr_pipeline.run_pipeline(
-                        pdf_path=str(pdf_path),
-                        ref_excel_path=str(ref_path),
-                        save_path=str(out_path),
-                    )
-                except Exception as e:
-                    st.error("The pipeline failed. Check the logs for details.")
-                    st.exception(e)
-                    return
-
-            # Read the output workbook into bytes for download
-            final_path = Path(final_path_str)
-            if not final_path.is_file():
-                st.error("Pipeline finished but the expected output file was not found.")
-                return
-
-            with open(final_path, "rb") as f:
-                data = f.read()
-
-            st.success("Pipeline complete! Download the combined workbook below.")
-
-            st.download_button(
-                label="Download Combined Workbook",
-                data=data,
-                file_name=final_path.name,
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            )
+        run_combined_proofing_ui(pdf_file, ref_file)
 
 
 if __name__ == "__main__":
