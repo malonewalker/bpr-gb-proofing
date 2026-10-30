@@ -270,9 +270,12 @@ def check_ratings(raw):
                 unread.append([i, "zero-total histogram", c])
                 continue
             avg = (c[0]*5 + c[1]*4 + c[2]*3 + c[3]*2 + c[4]*1) / tot
+            rounded = math.floor(avg * 10 + 0.5) / 10
+            truncated = math.floor(avg * 10) / 10
             checked += 1
-            if abs(math.floor(avg * 10 + 0.5) / 10 - p) > 0.051:
-                fails.append([i, c, round(avg, 3), p])
+            if min(abs(rounded - p), abs(truncated - p)) > 0.051:
+                expected = f"{rounded:.1f} rounded or {truncated:.1f} truncated (raw {avg:.3f})"
+                fails.append([i, c, expected, p])
     return {"checked": checked, "mismatches": fails, "unreadable": unread}
 
 
@@ -395,20 +398,21 @@ def check_toc(lay, listing, raw, inv):
 
 
 def check_characters(raw):
-    straight, nested, glyphs = [], [], []
+    smart_apostrophes, smart_quotes, glyphs = [], [], []
     dashes = collections.Counter()
     for i, t in raw.items():
         flat = t.replace("\n", " ")
-        for m in re.finditer(r".{0,32}\w'\w.{0,28}", flat):
-            straight.append([i, re.sub(r'\s+', ' ', m.group(0))])
-        for m in re.finditer(r'[“"][‘’\'][^”"]{0,70}[‘’\'][”"]', flat):
-            nested.append([i, re.sub(r'\s+', ' ', m.group(0))])
+        for m in re.finditer(r".{0,32}\w’\w.{0,28}", flat):
+            smart_apostrophes.append([i, re.sub(r'\s+', ' ', m.group(0))])
+        for m in re.finditer(r'.{0,32}“[^”\n]{0,160}”.{0,28}', flat):
+            smart_quotes.append([i, re.sub(r'\s+', ' ', m.group(0))])
         for m in re.finditer(r'.{0,25}[-].{0,25}', flat):
             glyphs.append([i, re.sub(r'\s+', ' ', m.group(0))])
         for ch in t:
             if ch in '-‐‑‒–—­−':
                 dashes[ch] += 1
-    return {"straight_apostrophes": straight, "nested_quotes": nested,
+    return {"smart_apostrophes": smart_apostrophes,
+            "smart_quotation_marks": smart_quotes,
             "private_use_glyphs": glyphs,
             "dash_census": {f"U+{ord(k):04X}": v for k, v in dashes.items()}}
 
@@ -453,7 +457,7 @@ def _page_lines(g):
 
 
 def check_licences(geo):
-    pairs, missing = [], []
+    pairs, missing, invalid_characters = [], [], []
     band, xtol = CONFIG["licence_band"], CONFIG["licence_x_tol"]
     for g in geo:
         lines = _page_lines(g)
@@ -472,6 +476,9 @@ def check_licences(geo):
                 break
             if val:
                 pairs.append([g["page"], val])
+                prohibited = sorted(set(re.findall(r'[?+^]', val)))
+                if prohibited:
+                    invalid_characters.append([g["page"], val, " ".join(prohibited)])
             else:
                 missing.append([g["page"], txt.strip()])
 
@@ -511,6 +518,7 @@ def check_licences(geo):
             "length_spread": spread,
             "values_read": len(pairs),
             "labels_without_value": missing,
+            "invalid_characters": invalid_characters,
             "format_outliers": outliers}
 
 
@@ -719,8 +727,8 @@ def report(r):
     print(f"    cross-category differences: {len(t['cross_category'])} of "
           f"{t['multi_category_companies']} multi-category companies")
     c = r["characters"]
-    print(f"  Characters          : {len(c['straight_apostrophes'])} straight "
-          f"apostrophes, {len(c['nested_quotes'])} doubled quote marks, "
+    print(f"  Characters          : {len(c['smart_apostrophes'])} smart "
+          f"apostrophes, {len(c.get('smart_quotation_marks', []))} smart quote pairs, "
           f"{len(c['private_use_glyphs'])} symbol-font glyphs")
     h = r["hygiene"]
     print(f"  Hygiene             : {len(h['ordinals'])} bad ordinals, "

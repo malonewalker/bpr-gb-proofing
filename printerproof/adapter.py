@@ -117,9 +117,9 @@ def printerproof_rows(r, brand):
     ra = r["ratings"]
     if ra["checked"] or ra["unreadable"]:
         for p, hist, avg, printed in ra["mismatches"]:
-            E.append(row(f"PDF page {p}", "Printed rating does not match star histogram",
+            E.append(row(f"PDF page {p}", "Printed rating matches neither rounded nor truncated star histogram",
                          f"{avg} from {hist}", printed, page=folio_of(r, p), prio="P2"))
-        cov("Rating recomputed from histogram", "FIX" if ra["mismatches"] else "PASS",
+        cov("Rating recomputed from histogram (rounded or truncated)", "FIX" if ra["mismatches"] else "PASS",
             f"{ra['checked']} recomputed, {len(ra['mismatches'])} mismatches, {len(ra['unreadable'])} unread")
     else:
         cov("Rating recomputed from histogram", "Not applicable", "BPR-only layout (FSR profiles carry no histogram)")
@@ -163,6 +163,11 @@ def printerproof_rows(r, brand):
         for p, label in li["labels_without_value"]:
             E.append(row(f"PDF page {p}", f"'{label}' prints with no licence number", "a number", "none",
                          page=folio_of(r, p), prio="P2"))
+        invalid_characters = li.get("invalid_characters", [])
+        for p, value, characters in invalid_characters:
+            E.append(row(value, "Licence contains prohibited character(s)",
+                         "no question mark, plus sign, or caret", characters,
+                         page=folio_of(r, p), prio="P2"))
         for o in li["format_outliers"]:
             if isinstance(o[2], list):
                 E.append(row(o[0], f"Licence class rare in this book ({o[3]}) — check state/class",
@@ -170,10 +175,11 @@ def printerproof_rows(r, brand):
             else:
                 E.append(row(o[2], f"Licence length unusual for class {o[0]} — possible dropped digit",
                              f"{o[4]} digits (class majority)", f"{o[3]} digits", page=folio_of(r, o[1]), prio="P3"))
-        cov("Licence labels paired with values; format outliers",
-            "FIX" if li["labels_without_value"] else ("VERIFY" if li["format_outliers"] else "PASS"),
+        cov("Licence labels paired with values; prohibited characters; format outliers",
+            "FIX" if (li["labels_without_value"] or invalid_characters) else ("VERIFY" if li["format_outliers"] else "PASS"),
             f"{li['values_read']} values read, classes {{{', '.join(f'{k}: {len(v)}' for k, v in li['classes'].items())}}}; "
-            f"{len(li['labels_without_value'])} labels without value, {len(li['format_outliers'])} outliers")
+            f"{len(li['labels_without_value'])} labels without value, {len(invalid_characters)} values with prohibited characters, "
+            f"{len(li['format_outliers'])} outliers")
     else:
         cov("Licence labels paired with values", "Not applicable" if brand == "FSR" else "DID NOT RUN",
             "FSR prints 'License(s):' inline — covered by the FSR app's licence extraction")
@@ -196,17 +202,21 @@ def printerproof_rows(r, brand):
     # -- characters / hygiene
     c = r["characters"]
     byword = {}
-    for p, ctx in c["straight_apostrophes"]:
-        m = re.search(r"[A-Za-z]+'[A-Za-z]+", ctx)
+    for p, ctx in c.get("smart_apostrophes", []):
+        m = re.search(r"[A-Za-z]+’[A-Za-z]+", ctx)
         wd = m.group(0) if m else ctx.strip()[:30]
         byword.setdefault(wd, set()).add(folio_of(r, p) or f"pdf {p}")
     for wd, pages in byword.items():
-        E.append(row(wd, f"Straight apostrophe in '{wd}' — fix the source database field, not the layout",
-                     wd.replace("'", "’"), wd, page=", ".join(str(x) for x in sorted(pages, key=str)), prio="P3"))
-    for p, ctx in c["nested_quotes"]:
-        E.append(row(ctx.strip(), "Doubled quote marks", "", "", page=folio_of(r, p), prio="P3"))
-    cov("Straight apostrophes / doubled quotes", "VERIFY" if (c["straight_apostrophes"] or c["nested_quotes"]) else "PASS",
-        f"{len(c['straight_apostrophes'])} straight apostrophes in {len(byword)} distinct word(s) {sorted(byword)}, {len(c['nested_quotes'])} doubled quotes "
+        E.append(row(wd, f"Curly/smart apostrophe in '{wd}' — use a straight apostrophe",
+                     wd.replace("’", "'"), wd, page=", ".join(str(x) for x in sorted(pages, key=str)), prio="P3"))
+    smart_quotes = c.get("smart_quotation_marks", [])
+    for p, ctx in smart_quotes:
+        E.append(row(ctx.strip(), "Curly/smart quotation marks — use straight quotation marks",
+                     '"quoted text"', "“quoted text”", page=folio_of(r, p), prio="P3"))
+    character_issues = c.get("smart_apostrophes", []) or smart_quotes
+    cov("Curly/smart apostrophes and quotation marks", "VERIFY" if character_issues else "PASS",
+        f"{len(c.get('smart_apostrophes', []))} smart apostrophes in {len(byword)} distinct word(s) {sorted(byword)}, "
+        f"{len(smart_quotes)} smart quote pair(s) "
         f"(symbol-font glyphs: {len(c['private_use_glyphs'])}, icon fonts — informational)")
     h = r["hygiene"]
     for p, s in h["ordinals"]:
