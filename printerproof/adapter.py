@@ -277,7 +277,7 @@ def app_rows(app_path, brand):
     return rows, passthrough
 
 
-def write(out, errors, coverage, passthrough, app_cov_line):
+def write(out, errors, coverage, passthrough, app_cov_line, spellcheck=None):
     errors = pd.DataFrame(errors, columns=COLS)
     order = {"P1": 0, "P2": 1, "P3": 2, "P4": 3}
     errors["_o"] = errors["Priority"].map(order).fillna(9)
@@ -286,7 +286,12 @@ def write(out, errors, coverage, passthrough, app_cov_line):
     with pd.ExcelWriter(out, engine="openpyxl") as w:
         errors.to_excel(w, sheet_name="Errors", index=False)
         cov.to_excel(w, sheet_name="Coverage", index=False)
+        pd.DataFrame(spellcheck or [], columns=COLS).to_excel(
+            w, sheet_name="Spellcheck", index=False
+        )
         for name, df in passthrough.items():
+            if name == "Spellcheck":
+                continue
             df.to_excel(w, sheet_name=name[:31], index=False)
     wb = load_workbook(out)
     # --- Read me tab, first
@@ -296,6 +301,7 @@ def write(out, errors, coverage, passthrough, app_cov_line):
         ("", ""),
         ("Errors", "One row per thing to look at. The app's own rows (Source = BPR app / FSR app) and the printer-proof rows (Source = PrinterProof) share the same columns."),
         ("Coverage", "One row per check that ran, with what it covered. PASS means it ran and found nothing. Not applicable means the check does not exist for this brand. DID NOT RUN means it should have and did not."),
+        ("Spellcheck", "pyspellchecker English candidates from geometry-aware PDF text blocks. Columns and designed text areas are checked independently; suggestions and surrounding text are shown in the Cobb review format."),
         ("Other tabs", "Copied through from the app unchanged (Profiles, Cat Listings, TOC, Comparison Results)."),
         ("", ""),
         ("Columns on Errors", ""),
@@ -313,7 +319,7 @@ def write(out, errors, coverage, passthrough, app_cov_line):
         rm.cell(i, 2).alignment = Alignment(wrap_text=True, vertical="top")
     rm.column_dimensions["A"].width = 26; rm.column_dimensions["B"].width = 110
     hdr = PatternFill("solid", start_color="1F4E79")
-    for ws in (wb["Errors"], wb["Coverage"]):
+    for ws in (wb["Errors"], wb["Coverage"], wb["Spellcheck"]):
         ws.freeze_panes = "A2"
         for c in ws[1]:
             c.fill = hdr; c.font = Font(bold=True, color="FFFFFF")
@@ -335,6 +341,15 @@ def write(out, errors, coverage, passthrough, app_cov_line):
         if stv in FILL:
             ws.cell(rr, 2).fill = PatternFill("solid", start_color=FILL[stv])
         ws.cell(rr, 3).alignment = Alignment(wrap_text=True, vertical="top")
+    ws = wb["Spellcheck"]
+    for col, wdt in {3: 30, 4: 62, 5: 30, 6: 75, 7: 30, 8: 30}.items():
+        ws.column_dimensions[get_column_letter(col)].width = wdt
+    for rr in range(2, ws.max_row + 1):
+        pr = ws.cell(rr, 9).value
+        if pr in FILL:
+            ws.cell(rr, 9).fill = PatternFill("solid", start_color=FILL[pr])
+        for cc in (4, 5, 6, 7):
+            ws.cell(rr, cc).alignment = Alignment(wrap_text=True, vertical="top")
     wb.save(out)
 
 
@@ -342,13 +357,27 @@ def build(results_path, out_path, brand="BPR", app_workbook=None, app_note=""):
     """Library entry point used by the Streamlit app. Returns out_path."""
     r = json.load(open(results_path))
     E, C = printerproof_rows(r, brand)
+    spellcheck = r.get("spellcheck", [])
+    p2 = sum(item.get("Priority") == "P2" for item in spellcheck)
+    p3 = sum(item.get("Priority") == "P3" for item in spellcheck)
+    p4 = sum(item.get("Priority") == "P4" for item in spellcheck)
+    C.append({
+        "Check": "Spelling (geometry blocks + pyspellchecker + BBB/project allow-lists)",
+        "Status": "VERIFY" if spellcheck else "PASS",
+        "Coverage / detail": (
+            f"{r.get('pages', 0)} pages and {r.get('spellcheck_blocks', 0)} text blocks scanned; "
+            f"{len(spellcheck)} distinct words flagged: "
+            f"{p2} likely typo(s) (P2), {p3} name/brand candidate(s) (P3), "
+            f"{p4} informational/allow-list candidate(s) (P4). See Spellcheck tab."
+        ),
+    })
     A, P = app_rows(app_workbook, brand)
     app_line = None
     if app_workbook:
         app_line = {"Check": f"{brand} proofing app (company presence/order, phone, licence vs Salesforce CSV)",
                     "Status": "FIX" if A else "PASS",
                     "Coverage / detail": app_note or f"{len(A)} findings from the app"}
-    write(out_path, A + E, C, P, app_line)
+    write(out_path, A + E, C, P, app_line, spellcheck=spellcheck)
     return out_path
 
 

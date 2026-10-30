@@ -1,0 +1,171 @@
+GEOMETRY-AWARE PDF SPELLCHECK SETUP
+===================================
+
+Overview
+--------
+
+This spellcheck uses geometry-aware PDF text extraction rather than checking
+the PDF as one continuous text stream. This prevents columns, sidebars, FAQs,
+and other designed text areas from being mixed together and reported as false
+spelling issues.
+
+
+1. Extract geometry-aware text
+------------------------------
+
+Process the PDF with Poppler:
+
+    pdftotext -bbox-layout input.pdf -
+
+This produces XHTML containing pages, text blocks, lines, words, and their
+coordinates.
+
+Unlike ordinary text extraction, this keeps separate columns and designed text
+areas in distinct blocks.
+
+
+2. Parse independent text blocks
+--------------------------------
+
+Parse the XHTML into a structure like:
+
+    {
+        pdf_page_number: [
+            "first text block",
+            "second text block",
+            ...
+        ]
+    }
+
+Check each block independently while retaining its original PDF page number.
+
+Poppler can occasionally emit control glyphs that XML 1.0 does not permit.
+Remove those characters before parsing the XHTML.
+
+
+3. Repair discretionary line-break hyphens
+-------------------------------------------
+
+Before spellchecking, reconstruct wrapped words when the combined form is a
+known dictionary or allow-list word.
+
+For example:
+
+    qualifica-
+    tion
+
+becomes:
+
+    qualification
+
+Likewise:
+
+    cus- tomer
+
+becomes:
+
+    customer
+
+Only perform the join when the combined result is recognized. This avoids
+indiscriminately changing genuine hyphenated terms.
+
+
+4. Check with pyspellchecker
+----------------------------
+
+Check the normalized block text with pyspellchecker's English frequency
+dictionary.
+
+For likely misspellings, return up to three suggestions ordered by dictionary
+frequency.
+
+
+5. Apply custom vocabulary
+--------------------------
+
+Exclude words from spellchecking when they appear in any of these sources:
+
+* The standard pyspellchecker English dictionary
+* A maintained project allow-list
+* Company names, published names, and categories imported from the project's
+  BBB/reference file
+
+The allow-list is case-insensitive and includes components of hyphenated or
+slash-separated entries.
+
+
+6. Filter low-value findings
+----------------------------
+
+Do not report:
+
+* Unknown names and brands
+* Unknown proper names used consistently
+* All-uppercase abbreviations
+* URL and email fragments
+* Normal contractions and possessives
+
+An unknown proper name should still be reported when a nearly identical
+spelling appears more frequently elsewhere in the same book. This catches
+inconsistencies such as:
+
+    Sulfridge
+    Sulfrigde
+
+
+7. Group repeated findings
+--------------------------
+
+Group repeated occurrences into one result containing:
+
+* Flagged word
+* Suggested corrections
+* Issue description
+* Context excerpt
+* Every PDF page where the word occurs
+* Priority
+
+
+8. Write a review workbook
+--------------------------
+
+Write the results to an Excel Spellcheck tab. Include a Coverage tab that
+records:
+
+* Pages checked
+* Number of geometry-aware text blocks
+* Allow-list coverage
+* Findings by priority
+
+
+Why block extraction matters
+----------------------------
+
+Checking reading-order or layout text directly can produce false findings from
+multi-column design pages. For example, a three-column FAQ caused fragments
+such as:
+
+    qualifica
+    tion
+    solu
+    tion
+
+Geometry-aware blocks preserved each column's reading flow.
+
+In the Cobb test, the block-aware approach processed:
+
+* 133 PDF pages
+* 4,060 independent text blocks
+* 2 remaining spelling candidates
+
+The two remaining candidates were one legitimate brand needing an allow-list
+entry and one likely actual spelling error.
+
+
+Implementation status
+---------------------
+
+The geometry-block configuration is the production spellcheck extraction mode
+in this project. The printer-proof run reuses its existing Poppler bounding-box
+export for both geometry checks and spellchecking, so the PDF is not exported a
+second time solely for spelling.

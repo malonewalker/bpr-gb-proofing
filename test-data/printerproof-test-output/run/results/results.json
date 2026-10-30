@@ -1,0 +1,2911 @@
+{
+ "pdf": "Cobb Fall 2026 Book_v1 (1).pdf",
+ "pages": 133,
+ "edition": 29,
+ "cover_metro": "BEST PICK REPORTS 2026 | Cobb / Marietta",
+ "assembly": {
+  "physical_pages": 133,
+  "max_stamp": null,
+  "duplicate_stamps": {},
+  "divisible_by_4": false
+ },
+ "folios": {
+  "ok": 122,
+  "issues": [],
+  "first": 5,
+  "last": 126,
+  "offset": 3,
+  "unnumbered": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   130,
+   131,
+   132,
+   133
+  ]
+ },
+ "inventory": [
+  {
+   "pdf": 1,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 2,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 3,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 4,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 5,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 6,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 7,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 8,
+   "indb": null,
+   "folio": 5,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 9,
+   "indb": null,
+   "folio": 6,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 10,
+   "indb": null,
+   "folio": 7,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 11,
+   "indb": null,
+   "folio": 8,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 12,
+   "indb": null,
+   "folio": 9,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 13,
+   "indb": null,
+   "folio": 10,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 14,
+   "indb": null,
+   "folio": 11,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 15,
+   "indb": null,
+   "folio": 12,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 16,
+   "indb": null,
+   "folio": 13,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 17,
+   "indb": null,
+   "folio": 14,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 18,
+   "indb": null,
+   "folio": 15,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 19,
+   "indb": null,
+   "folio": 16,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 20,
+   "indb": null,
+   "folio": 17,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 21,
+   "indb": null,
+   "folio": 18,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 22,
+   "indb": null,
+   "folio": 19,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 23,
+   "indb": null,
+   "folio": 20,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 24,
+   "indb": null,
+   "folio": 21,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 25,
+   "indb": null,
+   "folio": 22,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 26,
+   "indb": null,
+   "folio": 23,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 27,
+   "indb": null,
+   "folio": 24,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 28,
+   "indb": null,
+   "folio": 25,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 29,
+   "indb": null,
+   "folio": 26,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 30,
+   "indb": null,
+   "folio": 27,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 31,
+   "indb": null,
+   "folio": 28,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 32,
+   "indb": null,
+   "folio": 29,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 33,
+   "indb": null,
+   "folio": 30,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 34,
+   "indb": null,
+   "folio": 31,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 35,
+   "indb": null,
+   "folio": 32,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 36,
+   "indb": null,
+   "folio": 33,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 37,
+   "indb": null,
+   "folio": 34,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 38,
+   "indb": null,
+   "folio": 35,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 39,
+   "indb": null,
+   "folio": 36,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 40,
+   "indb": null,
+   "folio": 37,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 41,
+   "indb": null,
+   "folio": 38,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 42,
+   "indb": null,
+   "folio": 39,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 43,
+   "indb": null,
+   "folio": 40,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 44,
+   "indb": null,
+   "folio": 41,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 45,
+   "indb": null,
+   "folio": 42,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 46,
+   "indb": null,
+   "folio": 43,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 47,
+   "indb": null,
+   "folio": 44,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 48,
+   "indb": null,
+   "folio": 45,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 49,
+   "indb": null,
+   "folio": 46,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 50,
+   "indb": null,
+   "folio": 47,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 51,
+   "indb": null,
+   "folio": 48,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 52,
+   "indb": null,
+   "folio": 49,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 53,
+   "indb": null,
+   "folio": 50,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 54,
+   "indb": null,
+   "folio": 51,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 55,
+   "indb": null,
+   "folio": 52,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 56,
+   "indb": null,
+   "folio": 53,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 57,
+   "indb": null,
+   "folio": 54,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 58,
+   "indb": null,
+   "folio": 55,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 59,
+   "indb": null,
+   "folio": 56,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 60,
+   "indb": null,
+   "folio": 57,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 61,
+   "indb": null,
+   "folio": 58,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 62,
+   "indb": null,
+   "folio": 59,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 63,
+   "indb": null,
+   "folio": 60,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 64,
+   "indb": null,
+   "folio": 61,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 65,
+   "indb": null,
+   "folio": 62,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 66,
+   "indb": null,
+   "folio": 63,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 67,
+   "indb": null,
+   "folio": 64,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 68,
+   "indb": null,
+   "folio": 65,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 69,
+   "indb": null,
+   "folio": 66,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 70,
+   "indb": null,
+   "folio": 67,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 71,
+   "indb": null,
+   "folio": 68,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 72,
+   "indb": null,
+   "folio": 69,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 73,
+   "indb": null,
+   "folio": 70,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 74,
+   "indb": null,
+   "folio": 71,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 75,
+   "indb": null,
+   "folio": 72,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 76,
+   "indb": null,
+   "folio": 73,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 77,
+   "indb": null,
+   "folio": 74,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 78,
+   "indb": null,
+   "folio": 75,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 79,
+   "indb": null,
+   "folio": 76,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 80,
+   "indb": null,
+   "folio": 77,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 81,
+   "indb": null,
+   "folio": 78,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 82,
+   "indb": null,
+   "folio": 79,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 83,
+   "indb": null,
+   "folio": 80,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 84,
+   "indb": null,
+   "folio": 81,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 85,
+   "indb": null,
+   "folio": 82,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 86,
+   "indb": null,
+   "folio": 83,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 87,
+   "indb": null,
+   "folio": 84,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 88,
+   "indb": null,
+   "folio": 85,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 89,
+   "indb": null,
+   "folio": 86,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 90,
+   "indb": null,
+   "folio": 87,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 91,
+   "indb": null,
+   "folio": 88,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 92,
+   "indb": null,
+   "folio": 89,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 93,
+   "indb": null,
+   "folio": 90,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 94,
+   "indb": null,
+   "folio": 91,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 95,
+   "indb": null,
+   "folio": 92,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 96,
+   "indb": null,
+   "folio": 93,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 97,
+   "indb": null,
+   "folio": 94,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 98,
+   "indb": null,
+   "folio": 95,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 99,
+   "indb": null,
+   "folio": 96,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 100,
+   "indb": null,
+   "folio": 97,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 101,
+   "indb": null,
+   "folio": 98,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 102,
+   "indb": null,
+   "folio": 99,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 103,
+   "indb": null,
+   "folio": 100,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 104,
+   "indb": null,
+   "folio": 101,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 105,
+   "indb": null,
+   "folio": 102,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 106,
+   "indb": null,
+   "folio": 103,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 107,
+   "indb": null,
+   "folio": 104,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 108,
+   "indb": null,
+   "folio": 105,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 109,
+   "indb": null,
+   "folio": 106,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 110,
+   "indb": null,
+   "folio": 107,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 111,
+   "indb": null,
+   "folio": 108,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 112,
+   "indb": null,
+   "folio": 109,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 113,
+   "indb": null,
+   "folio": 110,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 114,
+   "indb": null,
+   "folio": 111,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 115,
+   "indb": null,
+   "folio": 112,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 116,
+   "indb": null,
+   "folio": 113,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 117,
+   "indb": null,
+   "folio": 114,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 118,
+   "indb": null,
+   "folio": 115,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 119,
+   "indb": null,
+   "folio": 116,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 120,
+   "indb": null,
+   "folio": 117,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 121,
+   "indb": null,
+   "folio": 118,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 122,
+   "indb": null,
+   "folio": 119,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 123,
+   "indb": null,
+   "folio": 120,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 124,
+   "indb": null,
+   "folio": 121,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 125,
+   "indb": null,
+   "folio": 122,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 126,
+   "indb": null,
+   "folio": 123,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 127,
+   "indb": null,
+   "folio": 124,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 128,
+   "indb": null,
+   "folio": 125,
+   "side": "R",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 129,
+   "indb": null,
+   "folio": 126,
+   "side": "L",
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 130,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 131,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 132,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  },
+  {
+   "pdf": 133,
+   "indb": null,
+   "folio": null,
+   "side": null,
+   "folio_h": 18.6
+  }
+ ],
+ "categories": 43,
+ "companies": 125,
+ "listing": {
+  "Air Conditioning & Heating": [
+   {
+    "company": "Central Heating and Air Conditioning\b",
+    "phone": "678-572-1322",
+    "tenure": 29
+   },
+   {
+    "company": "Casteel Heating, Cooling, Plumbing & Electrical\b",
+    "phone": "678-757-7132",
+    "tenure": 18
+   },
+   {
+    "company": "Estes Services, Heat, Air, Plumbing & Electrical\b",
+    "phone": "678-487-2618",
+    "tenure": 14
+   },
+   {
+    "company": "R.S. Andrews Services, Inc.\b",
+    "phone": "678-207-3476",
+    "tenure": 11
+   },
+   {
+    "company": "TE Certified Electrical, Plumbing, Heating & Cooling\b",
+    "phone": "678-336-7627",
+    "tenure": 7
+   },
+   {
+    "company": "Snappy Electric, Plumbing, Heating, & Air\b",
+    "phone": "678-841-8692",
+    "tenure": 3
+   }
+  ],
+  "Appliance Repair": [
+   {
+    "company": "Appliance Care of Atlanta\b",
+    "phone": "678-400-0923",
+    "tenure": 8
+   },
+   {
+    "company": "Appliance Tech Pros & Refrigeration Repair LLC\b",
+    "phone": "678-235-3170",
+    "tenure": 1
+   }
+  ],
+  "Bathtub & Shower Conversions": [
+   {
+    "company": "Jacuzzi Bath Remodel of Atlanta\b",
+    "phone": "678-730-7257",
+    "tenure": 2
+   },
+   {
+    "company": "Bath Fitter Atlanta\b",
+    "phone": "678-498-1544",
+    "tenure": 1
+   }
+  ],
+  "Blinds & Indoor Shutters": [
+   {
+    "company": "Castleberry Shutters, Inc.\b",
+    "phone": "404-418-4657",
+    "tenure": 22
+   }
+  ],
+  "Carpet, Upholstery & Rug Cleaning": [
+   {
+    "company": "Hughes Dry Professional Carpet Cleaning & Repairs\b",
+    "phone": "678-207-3585",
+    "tenure": 24
+   },
+   {
+    "company": "ARS Restoration\b",
+    "phone": "678-712-7752",
+    "tenure": 18
+   }
+  ],
+  "Closet, Kitchen & Garage Organizers": [
+   {
+    "company": "Artisan Custom Closets\b",
+    "phone": "678-593-2962",
+    "tenure": 12
+   }
+  ],
+  "Concrete - Driveways, Sidewalks & Patios": [
+   {
+    "company": "Sudlow Concrete\b",
+    "phone": "678-786-2567",
+    "tenure": 4
+   },
+   {
+    "company": "JMR Home Services\b",
+    "phone": "678-214-2064",
+    "tenure": 4
+   }
+  ],
+  "Concrete Leveling & Raising": [
+   {
+    "company": "AquaGuard Foundation Solutions\b",
+    "phone": "678-268-6537",
+    "tenure": 8
+   },
+   {
+    "company": "Atlanta Basement Systems\b",
+    "phone": "678-944-8271",
+    "tenure": 4
+   }
+  ],
+  "Deck Building & Maintenance": [
+   {
+    "company": "Crippen Woodworks\b",
+    "phone": "678-712-7771",
+    "tenure": 23
+   },
+   {
+    "company": "Outback Deck, Inc.\b",
+    "phone": "678-214-7610",
+    "tenure": 8
+   },
+   {
+    "company": "Builders America\b",
+    "phone": "678-321-1771",
+    "tenure": 8
+   },
+   {
+    "company": "Nelson Exteriors\b",
+    "phone": "770-762-5876",
+    "tenure": 4
+   },
+   {
+    "company": "Painting Plus\b",
+    "phone": "678-882-7350",
+    "tenure": 2
+   }
+  ],
+  "Drain/Sewer Cleaning & Repair": [
+   {
+    "company": "Fulton Services\b",
+    "phone": "678-593-2966",
+    "tenure": 11
+   },
+   {
+    "company": "Superior Plumbing Services, Inc.\b",
+    "phone": "678-554-4493",
+    "tenure": 11
+   },
+   {
+    "company": "Rooter Pro Plumbing GA\b",
+    "phone": "678-785-3668",
+    "tenure": 2
+   },
+   {
+    "company": "Peach Plumbing & Drain\b",
+    "phone": "678-293-7462",
+    "tenure": 2
+   }
+  ],
+  "Dryer Vent Cleaning": [
+   {
+    "company": "Ned's Dryer Vent Cleaning, a division of Ned's Home\b",
+    "phone": "678-573-1847",
+    "tenure": 1
+   }
+  ],
+  "Duct Cleaning": [
+   {
+    "company": "Air of America Air Duct & Dryer Vent Cleaning Services\b",
+    "phone": "678-323-4319",
+    "tenure": 7
+   },
+   {
+    "company": "R.S. Andrews Services, Inc.\b",
+    "phone": "678-831-6516",
+    "tenure": 4
+   },
+   {
+    "company": "LServices - Air Duct Cleaning\b",
+    "phone": "470-256-0830",
+    "tenure": 3
+   }
+  ],
+  "Electricians": [
+   {
+    "company": "TE Certified Electrical, Plumbing, Heating & Cooling\b",
+    "phone": "678-572-1413",
+    "tenure": 14
+   },
+   {
+    "company": "Estes Services, Heat, Air, Plumbing & Electrical\b",
+    "phone": "678-341-5391",
+    "tenure": 14
+   },
+   {
+    "company": "Mister Sparky\b",
+    "phone": "678-233-2293",
+    "tenure": 9
+   },
+   {
+    "company": "Bardi Heating, Cooling, Plumbing, Electrical\b",
+    "phone": "678-990-5915",
+    "tenure": 2
+   }
+  ],
+  "Fences": [
+   {
+    "company": "Academy Fence Brokers\b",
+    "phone": "678-268-6514",
+    "tenure": 9
+   },
+   {
+    "company": "JMR Home Services\b",
+    "phone": "678-572-1806",
+    "tenure": 2
+   }
+  ],
+  "Flooring": [
+   {
+    "company": "Emperial Hardwood Floors\b",
+    "phone": "678-960-2271",
+    "tenure": 26
+   },
+   {
+    "company": "Northside Floors\b",
+    "phone": "678-563-1457",
+    "tenure": 9
+   },
+   {
+    "company": "Select Floors\b",
+    "phone": "678-466-3585",
+    "tenure": 7
+   },
+   {
+    "company": "Concept Flooring Inc.\b",
+    "phone": "678-719-4899",
+    "tenure": 3
+   },
+   {
+    "company": "Authentic Hardwood Flooring\b",
+    "phone": "678-883-7223",
+    "tenure": 3
+   },
+   {
+    "company": "JMR Home Services\b",
+    "phone": "678-216-3958",
+    "tenure": 2
+   }
+  ],
+  "Foundation Repair": [
+   {
+    "company": "AquaGuard Foundation Solutions\b",
+    "phone": "678-572-1755",
+    "tenure": 24
+   },
+   {
+    "company": "American Crawlspace Solutions\b",
+    "phone": "678-633-3911",
+    "tenure": 7
+   },
+   {
+    "company": "Atlanta Basement Systems\b",
+    "phone": "678-820-6431",
+    "tenure": 4
+   },
+   {
+    "company": "'58 Foundations & Waterproofing\b",
+    "phone": "678-990-1144",
+    "tenure": 4
+   }
+  ],
+  "Garage Doors": [
+   {
+    "company": "All Four Seasons Garage & Entry Doors\b",
+    "phone": "678-207-5482",
+    "tenure": 20
+   },
+   {
+    "company": "Platinum Overhead Door\b",
+    "phone": "678-233-2302",
+    "tenure": 8
+   },
+   {
+    "company": "A1 Garage Door Service\b",
+    "phone": "678-679-6727",
+    "tenure": 1
+   }
+  ],
+  "Garage Floor Coating": [
+   {
+    "company": "Granite Garage Floors Atlanta\b",
+    "phone": "470-646-6553",
+    "tenure": 2
+   }
+  ],
+  "Gutter & Gutter Guard Installation": [
+   {
+    "company": "Gutter Perfection, Inc.\b",
+    "phone": "678-251-0927",
+    "tenure": 22
+   },
+   {
+    "company": "Master Tech GA, Inc.\b",
+    "phone": "678-207-3591",
+    "tenure": 14
+   },
+   {
+    "company": "Swainco Gutters, Inc.\b",
+    "phone": "678-321-1798",
+    "tenure": 13
+   },
+   {
+    "company": "Ned Stevens Gutter Installation, a division of Ned's Home\b",
+    "phone": "678-916-8566",
+    "tenure": 4
+   },
+   {
+    "company": "LeafFilter Gutter Protection\b",
+    "phone": "678-578-8836",
+    "tenure": 3
+   }
+  ],
+  "Gutter Cleaning": [
+   {
+    "company": "Atlanta's Best Gutter Cleaners, LLC\b",
+    "phone": "678-572-1766",
+    "tenure": 17
+   },
+   {
+    "company": "Gutters Plus\b",
+    "phone": "678-323-1429",
+    "tenure": 7
+   },
+   {
+    "company": "Ned Stevens Gutter Cleaning, a division of Ned's Home\b",
+    "phone": "678-268-6541",
+    "tenure": 5
+   },
+   {
+    "company": "Ace Gutter Cleaning\b",
+    "phone": "678-941-1863",
+    "tenure": 4
+   }
+  ],
+  "Handyman Services": [
+   {
+    "company": "The Trusted Toolbox\b",
+    "phone": "678-515-1784",
+    "tenure": 11
+   },
+   {
+    "company": "JMR Home Services\b",
+    "phone": "678-737-4976",
+    "tenure": 2
+   },
+   {
+    "company": "MMI Home Improvement Pro\b",
+    "phone": "678-203-9377",
+    "tenure": 1
+   }
+  ],
+  "House Cleaning Services": [
+   {
+    "company": "It's Maid Day!\b",
+    "phone": "678-554-4539",
+    "tenure": 11
+   }
+  ],
+  "Insulation": [
+   {
+    "company": "Aladdin Insulation & Home Improvements\b",
+    "phone": "678-341-5797",
+    "tenure": 14
+   },
+   {
+    "company": "Central Insulation Weatherization & Home Performance\b",
+    "phone": "678-345-1584",
+    "tenure": 12
+   },
+   {
+    "company": "R.S. Andrews Services, Inc.\b",
+    "phone": "678-572-1770",
+    "tenure": 6
+   }
+  ],
+  "Kitchen & Bathroom Remodeling": [
+   {
+    "company": "Impressive Tile, Inc.\b",
+    "phone": "678-757-7134",
+    "tenure": 21
+   },
+   {
+    "company": "JMR Home Services\b",
+    "phone": "678-582-8229",
+    "tenure": 4
+   }
+  ],
+  "Landscaping": [
+   {
+    "company": "Scapes\b",
+    "phone": "678-487-2588",
+    "tenure": 29
+   },
+   {
+    "company": "Outside Landscape Group\b",
+    "phone": "678-960-2237",
+    "tenure": 19
+   },
+   {
+    "company": "Outdoor Makeover & Living Spaces\b",
+    "phone": "470-693-9104",
+    "tenure": 2
+   }
+  ],
+  "Movers": [
+   {
+    "company": "Mark the Mover\b",
+    "phone": "678-341-4970",
+    "tenure": 19
+   }
+  ],
+  "Outdoor Kitchens & Living Spaces": [
+   {
+    "company": "Outdoor Makeover & Living Spaces\b",
+    "phone": "678-391-4907",
+    "tenure": 2
+   }
+  ],
+  "Painters": [
+   {
+    "company": "Brownlow & Sons\b",
+    "phone": "678-712-7817",
+    "tenure": 29
+   },
+   {
+    "company": "Kenneth W. Axt & Associates\b",
+    "phone": "678-487-2581",
+    "tenure": 27
+   },
+   {
+    "company": "Impressive Finishes\b",
+    "phone": "678-960-2228",
+    "tenure": 25
+   },
+   {
+    "company": "SuperiorPRO, LLC\b",
+    "phone": "678-207-4856",
+    "tenure": 23
+   },
+   {
+    "company": "Nelson Exteriors\b",
+    "phone": "678-329-2111",
+    "tenure": 19
+   },
+   {
+    "company": "Atlanta Painting Company\b",
+    "phone": "678-635-9413",
+    "tenure": 11
+   }
+  ],
+  "Pest & Termite Control": [
+   {
+    "company": "BREDA Pest Management\b",
+    "phone": "678-712-7819",
+    "tenure": 25
+   },
+   {
+    "company": "North Fulton Pest Solutions\b",
+    "phone": "678-487-2561",
+    "tenure": 14
+   },
+   {
+    "company": "Critter Control\b",
+    "phone": "470-458-2964",
+    "tenure": 3
+   }
+  ],
+  "Plumbers": [
+   {
+    "company": "Fulton Services\b",
+    "phone": "678-251-0936",
+    "tenure": 29
+   },
+   {
+    "company": "Superior Plumbing Services, Inc.\b",
+    "phone": "678-757-7171",
+    "tenure": 19
+   },
+   {
+    "company": "Estes Services, Heat, Air, Plumbing & Electrical\b",
+    "phone": "678-233-2289",
+    "tenure": 14
+   },
+   {
+    "company": "Casteel Heating, Cooling, Plumbing & Electrical\b",
+    "phone": "678-774-7927",
+    "tenure": 12
+   },
+   {
+    "company": "R.S. Andrews Services, Inc.\b",
+    "phone": "678-321-1782",
+    "tenure": 12
+   },
+   {
+    "company": "TE Certified Electrical, Plumbing, Heating & Cooling\b",
+    "phone": "678-487-2188",
+    "tenure": 7
+   }
+  ],
+  "Pool Companies": [
+   {
+    "company": "Outdoor Makeover & Living Spaces\b",
+    "phone": "470-347-9438",
+    "tenure": 2
+   }
+  ],
+  "Pressure Washing": [
+   {
+    "company": "Ned's Power Washing, a division of Ned's Home\b",
+    "phone": "470-778-4551",
+    "tenure": 1
+   },
+   {
+    "company": "Proline Pressure Washing, LLC\b",
+    "phone": "678-304-2199",
+    "tenure": 1
+   }
+  ],
+  "Roof Cleaning": [
+   {
+    "company": "Ned's Power Washing, a division of Ned's Home\b",
+    "phone": "470-663-9108",
+    "tenure": 1
+   }
+  ],
+  "Roofers": [
+   {
+    "company": "Echols Roofing and Renovations\b",
+    "phone": "678-712-7833",
+    "tenure": 28
+   },
+   {
+    "company": "Superior Roofing Company of Georgia, Inc.\b",
+    "phone": "678-960-2766",
+    "tenure": 25
+   },
+   {
+    "company": "Atlanta Roofing Specialists\b",
+    "phone": "678-208-1085",
+    "tenure": 21
+   },
+   {
+    "company": "Dr Roof Atlanta\b",
+    "phone": "678-562-6106",
+    "tenure": 4
+   },
+   {
+    "company": "Pacific Exteriors LLC\b",
+    "phone": "470-287-3476",
+    "tenure": 3
+   },
+   {
+    "company": "Nelson Exteriors\b",
+    "phone": "470-720-4214",
+    "tenure": 2
+   }
+  ],
+  "Siding": [
+   {
+    "company": "Nelson Exteriors\b",
+    "phone": "678-633-3969",
+    "tenure": 14
+   },
+   {
+    "company": "SuperiorPRO, LLC\b",
+    "phone": "678-757-7148",
+    "tenure": 13
+   },
+   {
+    "company": "Siding Plus\b",
+    "phone": "678-233-2291",
+    "tenure": 10
+   },
+   {
+    "company": "Siding Depot\b",
+    "phone": "678-304-2451",
+    "tenure": 8
+   },
+   {
+    "company": "Pacific Exteriors LLC\b",
+    "phone": "470-646-7170",
+    "tenure": 4
+   },
+   {
+    "company": "Dr Roof Atlanta\b",
+    "phone": "678-534-3288",
+    "tenure": 4
+   }
+  ],
+  "Tile Installation": [
+   {
+    "company": "I.D.P. Tile Contractor\b",
+    "phone": "678-341-2564",
+    "tenure": 19
+   }
+  ],
+  "Tree Services": [
+   {
+    "company": "AKA Tree Service\b",
+    "phone": "678-321-1623",
+    "tenure": 10
+   },
+   {
+    "company": "Top Tier Trees\b",
+    "phone": "678-726-5451",
+    "tenure": 5
+   }
+  ],
+  "Water Treatment & Filtration": [
+   {
+    "company": "Leaf Home Water Solutions\b",
+    "phone": "470-748-0073",
+    "tenure": 1
+   }
+  ],
+  "Water, Mold, Fire & Storm Damage Restoration": [
+   {
+    "company": "Legacy Restoration Services\b",
+    "phone": "678-341-2551",
+    "tenure": 16
+   },
+   {
+    "company": "ARS Restoration\b",
+    "phone": "678-554-4657",
+    "tenure": 7
+   }
+  ],
+  "Waterproofing": [
+   {
+    "company": "AquaGuard Foundation Solutions\b",
+    "phone": "678-960-2264",
+    "tenure": 27
+   },
+   {
+    "company": "American Crawlspace Solutions\b",
+    "phone": "678-633-3834",
+    "tenure": 7
+   },
+   {
+    "company": "Atlanta Basement Systems\b",
+    "phone": "678-336-5113",
+    "tenure": 4
+   },
+   {
+    "company": "'58 Foundations & Waterproofing\b",
+    "phone": "678-568-4334",
+    "tenure": 4
+   }
+  ],
+  "Wildlife Removal": [
+   {
+    "company": "North Fulton Pest Solutions\b",
+    "phone": "678-233-2310",
+    "tenure": 8
+   },
+   {
+    "company": "BREDA Pest Management\b",
+    "phone": "678-335-9725",
+    "tenure": 8
+   },
+   {
+    "company": "Critter Control\b",
+    "phone": "678-533-6933",
+    "tenure": 6
+   }
+  ],
+  "Window & Door Replacement": [
+   {
+    "company": "Echols Roofing and Renovations\b",
+    "phone": "678-572-1880",
+    "tenure": 28
+   },
+   {
+    "company": "Davis Window & Door\b",
+    "phone": "678-251-0912",
+    "tenure": 26
+   },
+   {
+    "company": "Nelson Exteriors\b",
+    "phone": "678-341-2567",
+    "tenure": 15
+   },
+   {
+    "company": "SuperiorPRO, LLC\b",
+    "phone": "678-214-7155",
+    "tenure": 6
+   },
+   {
+    "company": "DuraMAX Siding & Windows\b",
+    "phone": "678-616-9939",
+    "tenure": 3
+   },
+   {
+    "company": "All Four Seasons Windows\b",
+    "phone": "678-883-1857",
+    "tenure": 3
+   }
+  ],
+  "Window Cleaning": [
+   {
+    "company": "Ned's Window Cleaning, a division of Ned's Home\b",
+    "phone": "470-466-9403",
+    "tenure": 1
+   }
+  ]
+ },
+ "phones": {
+  "parsed": 125,
+  "expected": 126,
+  "mismatches": []
+ },
+ "ratings": {
+  "checked": 126,
+  "mismatches": [],
+  "unreadable": []
+ },
+ "tenure": {
+  "order_issues": [],
+  "over_ceiling": [],
+  "cross_category": [
+   [
+    "Casteel Heating, Cooling, Plumbing & Electrical\b",
+    {
+     "Air Conditioning & Heating": 18,
+     "Plumbers": 12
+    }
+   ],
+   [
+    "R.S. Andrews Services, Inc.\b",
+    {
+     "Air Conditioning & Heating": 11,
+     "Duct Cleaning": 4,
+     "Insulation": 6,
+     "Plumbers": 12
+    }
+   ],
+   [
+    "TE Certified Electrical, Plumbing, Heating & Cooling\b",
+    {
+     "Air Conditioning & Heating": 7,
+     "Electricians": 14,
+     "Plumbers": 7
+    }
+   ],
+   [
+    "ARS Restoration\b",
+    {
+     "Carpet, Upholstery & Rug Cleaning": 18,
+     "Water, Mold, Fire & Storm Damage Restoration": 7
+    }
+   ],
+   [
+    "JMR Home Services\b",
+    {
+     "Concrete - Driveways, Sidewalks & Patios": 4,
+     "Fences": 2,
+     "Flooring": 2,
+     "Handyman Services": 2,
+     "Kitchen & Bathroom Remodeling": 4
+    }
+   ],
+   [
+    "AquaGuard Foundation Solutions\b",
+    {
+     "Concrete Leveling & Raising": 8,
+     "Foundation Repair": 24,
+     "Waterproofing": 27
+    }
+   ],
+   [
+    "Nelson Exteriors\b",
+    {
+     "Deck Building & Maintenance": 4,
+     "Painters": 19,
+     "Roofers": 2,
+     "Siding": 14,
+     "Window & Door Replacement": 15
+    }
+   ],
+   [
+    "Fulton Services\b",
+    {
+     "Drain/Sewer Cleaning & Repair": 11,
+     "Plumbers": 29
+    }
+   ],
+   [
+    "Superior Plumbing Services, Inc.\b",
+    {
+     "Drain/Sewer Cleaning & Repair": 11,
+     "Plumbers": 19
+    }
+   ],
+   [
+    "SuperiorPRO, LLC\b",
+    {
+     "Painters": 23,
+     "Siding": 13,
+     "Window & Door Replacement": 6
+    }
+   ],
+   [
+    "BREDA Pest Management\b",
+    {
+     "Pest & Termite Control": 25,
+     "Wildlife Removal": 8
+    }
+   ],
+   [
+    "North Fulton Pest Solutions\b",
+    {
+     "Pest & Termite Control": 14,
+     "Wildlife Removal": 8
+    }
+   ],
+   [
+    "Critter Control\b",
+    {
+     "Pest & Termite Control": 3,
+     "Wildlife Removal": 6
+    }
+   ],
+   [
+    "Pacific Exteriors LLC\b",
+    {
+     "Roofers": 3,
+     "Siding": 4
+    }
+   ]
+  ],
+  "max_claim": 29,
+  "edition": 29,
+  "multi_category_companies": 22
+ },
+ "directory": {
+  "sheet_pages": [
+   130,
+   131
+  ],
+  "sheet_page": 130,
+  "entries_per_sheet_page": {
+   "130": 69,
+   "131": 57
+  },
+  "sheet_count": 125,
+  "listing_count": 125,
+  "missing_from_sheet": [],
+  "orphans_on_sheet": [],
+  "categories_missing_from_sheet": []
+ },
+ "toc": {
+  "7": {
+   "entries": 59,
+   "correct": 59,
+   "mismatched": [],
+   "unresolved": []
+  },
+  "133": {
+   "entries": 59,
+   "correct": 59,
+   "mismatched": [],
+   "unresolved": []
+  }
+ },
+ "characters": {
+  "straight_apostrophes": [
+   [
+    33,
+    "st Pick Reports recommends: \u25a0 Ned's Dryer Vent Cleaning, a divi"
+   ],
+   [
+    33,
+    "sion of Ned's Home\b 1st year as a Best Pi"
+   ],
+   [
+    55,
+    "r Installation, a division of Ned's Home\b 678-916-8566 \u25a0 Leaf"
+   ],
+   [
+    59,
+    "ick Reports recommends: \u25a0 Atlanta's Best Gutter Cleaners, LLC\b "
+   ],
+   [
+    59,
+    "utter Cleaning, a division of Ned's Home\b 678-268-6541 \u25a0 Ace "
+   ],
+   [
+    65,
+    "est Pick Reports recommends: \u25a0 It's Maid Day!\b 678-554-4539 1"
+   ],
+   [
+    92,
+    "st Pick Reports recommends: \u25a0 Ned's Power Washing, a division o"
+   ],
+   [
+    92,
+    "f Ned's Home\b 470-778-4551 \u25a0 Prol"
+   ],
+   [
+    94,
+    "st Pick Reports recommends: \u25a0 Ned's Power Washing, a division o"
+   ],
+   [
+    94,
+    "f Ned's Home\b 1st year as a Best Pi"
+   ],
+   [
+    122,
+    "st Pick Reports recommends: \u25a0 Ned's Window Cleaning, a division"
+   ],
+   [
+    122,
+    " of Ned's Home\b 1st year as a Best Pi"
+   ],
+   [
+    130,
+    "r Installation, a division of Ned's Home\b Swainco Gutters, Inc"
+   ],
+   [
+    130,
+    " Plumbing, Heating & Cooling\b Ned's Dryer Vent Cleaning, a divi"
+   ],
+   [
+    130,
+    "sion of Ned's Home\b 678-400-0923 LServi"
+   ],
+   [
+    130,
+    "78-578-8836 678-572-1413 Atlanta's Best Gutter Cleaners, LLC\b "
+   ],
+   [
+    130,
+    "utter Cleaning, a division of Ned's Home\b 678-941-1863 678-26"
+   ],
+   [
+    130,
+    "\b 678-554-4539 678-341-5797 It's Maid Day!\b 678-345-1584 6"
+   ],
+   [
+    131,
+    "ving Spaces\b Window Cleaning Ned's Window Cleaning, a division"
+   ],
+   [
+    131,
+    " of Ned's Home\b 470-720-4214 Nelson"
+   ],
+   [
+    131,
+    "Management\b Critter Control\b Ned's Power Washing, a division o"
+   ],
+   [
+    131,
+    "f Ned's Home\b 678-233-2310 678-56"
+   ],
+   [
+    131,
+    " Waterproofing\b 470-778-4551 Ned's Power Washing, a division o"
+   ],
+   [
+    131,
+    "f Ned's Home\b Atlanta Basement Sys"
+   ]
+  ],
+  "nested_quotes": [],
+  "private_use_glyphs": [
+   [
+    132,
+    "e Our Family of Brands: \uf050 Remodeling.com is an onl"
+   ],
+   [
+    132,
+    "es and service providers \uf050 Five Star Rated is diffe"
+   ],
+   [
+    132,
+    "l home service companies \uf050 Contractor On Call by Re"
+   ]
+  ],
+  "dash_census": {
+   "U+002D": 1635,
+   "U+2014": 6
+  }
+ },
+ "hygiene": {
+  "ordinals": [],
+  "doubled_words": [],
+  "duplicate_pages": []
+ },
+ "licences": {
+  "classes": {
+   "CN": [
+    "CN006931",
+    "CN209244",
+    "CN209549",
+    "CN211068",
+    "CN211140"
+   ],
+   "CR": [
+    "CR109281"
+   ],
+   "RBCO": [
+    "RBCO003299",
+    "RBCO004772",
+    "RBCO005853",
+    "RBCO007032",
+    "RBCO007510"
+   ],
+   "RLCO": [
+    "RLCO003706"
+   ],
+   "RBQA": [
+    "RBQA000446",
+    "RBQA001102"
+   ],
+   "MP": [
+    "MP004170",
+    "MP006066",
+    "MP208249",
+    "MP210186",
+    "MP210426",
+    "MP210486",
+    "MP210847",
+    "MP210875"
+   ],
+   "EN": [
+    "EN214217",
+    "EN214497",
+    "EN214616",
+    "EN217644"
+   ],
+   "HHG": [
+    "HHG-7576, USDOT-758674, MC-342211"
+   ],
+   "NUM": [
+    "100346",
+    "97376",
+    "98497"
+   ]
+  },
+  "length_spread": {
+   "CN": {
+    "6": 5
+   },
+   "CR": {
+    "6": 1
+   },
+   "RBCO": {
+    "6": 5
+   },
+   "RLCO": {
+    "6": 1
+   },
+   "RBQA": {
+    "6": 2
+   },
+   "MP": {
+    "6": 8
+   },
+   "EN": {
+    "6": 4
+   },
+   "HHG": {
+    "4": 1
+   },
+   "NUM": {
+    "5": 2,
+    "6": 1
+   }
+  },
+  "values_read": 33,
+  "labels_without_value": [],
+  "format_outliers": [
+   [
+    "CR",
+    9,
+    [
+     "CR109281"
+    ],
+    "1 of 30 licences in this book",
+    ""
+   ],
+   [
+    "RLCO",
+    27,
+    [
+     "RLCO003706"
+    ],
+    "1 of 30 licences in this book",
+    ""
+   ],
+   [
+    "HHG",
+    76,
+    [
+     "HHG-7576, USDOT-758674, MC-342211"
+    ],
+    "1 of 30 licences in this book",
+    ""
+   ]
+  ]
+ },
+ "tracking": {
+  "words": 16886,
+  "lines": 2089,
+  "median": 0.9959,
+  "stdev": 0.0622,
+  "flagged_pages": [
+   [
+    0.931,
+    5
+   ],
+   [
+    0.942,
+    100
+   ],
+   [
+    0.95,
+    67
+   ]
+  ],
+  "flagged_lines": [
+   [
+    0.783,
+    [
+     125,
+     34
+    ]
+   ],
+   [
+    0.836,
+    [
+     65,
+     23
+    ]
+   ],
+   [
+    0.842,
+    [
+     116,
+     43
+    ]
+   ],
+   [
+    0.846,
+    [
+     39,
+     12
+    ]
+   ],
+   [
+    0.847,
+    [
+     56,
+     38
+    ]
+   ],
+   [
+    0.85,
+    [
+     72,
+     31
+    ]
+   ],
+   [
+    0.851,
+    [
+     67,
+     39
+    ]
+   ],
+   [
+    0.858,
+    [
+     122,
+     10
+    ]
+   ],
+   [
+    0.865,
+    [
+     101,
+     53
+    ]
+   ],
+   [
+    0.867,
+    [
+     40,
+     9
+    ]
+   ],
+   [
+    0.867,
+    [
+     103,
+     45
+    ]
+   ],
+   [
+    0.868,
+    [
+     125,
+     44
+    ]
+   ],
+   [
+    0.871,
+    [
+     24,
+     31
+    ]
+   ],
+   [
+    0.874,
+    [
+     39,
+     46
+    ]
+   ],
+   [
+    0.879,
+    [
+     81,
+     28
+    ]
+   ]
+  ]
+ },
+ "spellcheck": [
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "inquirie",
+   "Issue": "Spelling: Likely misspelling",
+   "Expected": "inquire, inquiries",
+   "Found": "...businesses are motivated to answer calls and inquirie Our Family of Brands: \uf050 Remodeling.com is an...",
+   "Page": "pdf 132",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P2"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Allsup",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "allium, alsop, gallup",
+   "Found": "...problem solvers and project planners.\u201d Brent Allsup | Founder Warranty: The company guarantees c...",
+   "Page": "pdf 93",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Alpharetta",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...ipient of numerous awards, including Best of Alpharetta, Best of Buckhead, and Handyman of the Year....",
+   "Page": "pdf 63",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Amarr",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "amaru",
+   "Found": "...oor manufacturers, including Clopay, C.H.I., Amarr, doorLink, Haas, and more, as well as LiftMa...",
+   "Page": "pdf 51",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Austell",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "russell, austere, austen",
+   "Found": "...l grout and tile. The company does not serve Austell or Waleska. Minimum Job: A $2,000 project mi...",
+   "Page": "pdf 71",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Clopay",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "copay",
+   "Found": "...rom all garage door manufacturers, including Clopay, C.H.I., Amarr, doorLink, Haas, and more, as...",
+   "Page": "pdf 51",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Dacor",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "decor",
+   "Found": "...tchenAid, Sub-Zero, Wolf, Viking, Thermador, Dacor, Bosh, GE, JennAir, Scotsman, and more. Home...",
+   "Page": "pdf 13",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Daltile",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "daytime, tactile, saltine",
+   "Found": "...Karastan, Masland, Stanton, Anderson Tuftex, Daltile, and more. Homeowner Satisfaction Results 10...",
+   "Page": "pdf 45",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Dammann",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "damian, damming, amman",
+   "Found": "...r to trust is Rooter Pro Plumbing GA.\u201d Megan Dammann | Owner Homeowner Satisfaction Results 10098...",
+   "Page": "pdf 32",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Derekh",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "derek",
+   "Found": "...ley H. | Arlington, VA Steven C. | Allen, TX Derekh C. | Bethesda, MD",
+   "Page": "pdf 4",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Genoar",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "genoa, genoas",
+   "Found": "...on owner. His management team includes Chuck Genoar, Keith MacKinnon, and David Baker. Distincti...",
+   "Page": "pdf 68",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Guildmember",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...EPA Lead-Safe Certified Firm, a GuildQuality Guildmember, and a member of the National Association of...",
+   "Page": "pdf 119",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Heineman",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "lineman, heineken, heisman",
+   "Found": "...n Charlie Dallavalle Jr. Additionally, Kelli Heineman, Donna Brown, and Roderick Kent are an integ...",
+   "Page": "pdf 60",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "HomeAdvisor",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...rd winner, a Nextdoor Neighborhood Fave, and HomeAdvisor Top Rated. Employee Information: Employees w...  (+1 more)",
+   "Page": "pdf 40, pdf 52",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "JennAir",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "jenna, jenna's, jenner",
+   "Found": "...o, Wolf, Viking, Thermador, Dacor, Bosh, GE, JennAir, Scotsman, and more. Homeowner Satisfaction...",
+   "Page": "pdf 13",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Karastan",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "karajan",
+   "Found": "...ny offers Shaw, Mohawk, Aladdin, Mannington, Karastan, Masland, Stanton, Anderson Tuftex, Daltile,...",
+   "Page": "pdf 45",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Kaulig",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "hauling, mauling, kali",
+   "Found": "...The company was established in 2005 by Matt Kaulig and is part of a national franchise. Distinc...",
+   "Page": "pdf 58",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Kennesaw",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...t\u2019s Maid Day!  678-554-4539 \u201cWith offices in Kennesaw, Duluth, and Stone Mountain, we cleaned over...  (+1 more)",
+   "Page": "pdf 66",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Keroack",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "kerouac",
+   "Found": "...beautiful floors for our customers.\u201d Michael Keroack | Founder/Owner Homeowner Satisfaction Resul...",
+   "Page": "pdf 46",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Mannington",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "bennington, pennington",
+   "Found": "...n: The company offers Shaw, Mohawk, Aladdin, Mannington, Karastan, Masland, Stanton, Anderson Tuftex...",
+   "Page": "pdf 45",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Masland",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "island, mainland, garland",
+   "Found": "...Shaw, Mohawk, Aladdin, Mannington, Karastan, Masland, Stanton, Anderson Tuftex, Daltile, and more...",
+   "Page": "pdf 45",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Mingledorff",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...award, a Best of Georgia award winner, and a Mingledorff\u2019s Dealer Award winner. The company employs a N...",
+   "Page": "pdf 10",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Mishkoff",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...and superior results with every floor.\u201d Alan Mishkoff | Founder & Owner Warranty: The company offe...  (+1 more)",
+   "Page": "pdf 54",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "MoistureShield",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...ecializes in building decks with TimberTech, MoistureShield, and New Castle Steel\u2019s full line of product...  (+1 more)",
+   "Page": "pdf 27, pdf 28",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Noblitt",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "nobility, noblest, bobbitt",
+   "Found": "...ciation and the 2022 winner of GARCA\u2019s Boone Noblitt Award. Echols has 5-star Google and GuildQua...  (+1 more)",
+   "Page": "pdf 97, pdf 119",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Oconee",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "cone, ozone, cones",
+   "Found": "...oset and Storage Professionals, and the Lake Oconee Home Builders Association. In 2017, Artisan...",
+   "Page": "pdf 21",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "PermaFit",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "permit",
+   "Found": "...ll systems, accessories, and its proprietary PermaFit solution, which installs a new tub or shower...",
+   "Page": "pdf 15",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "PolyLevel",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...rete leveling and raising services using the PolyLevel polyurethane foam injection system. The comp...",
+   "Page": "pdf 25",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Rheem",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "rhee, rheum",
+   "Found": "...appy Electric, Plumbing, Heating, & Air is a Rheem Pro Partner, a Trane Comfort Specialist, and...",
+   "Page": "pdf 11",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Riegelsville",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...ing, MD Dave A. | Houston, TX Catharine F. | Riegelsville, PA",
+   "Page": "pdf 3",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Rinnai",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "minna, jinnah, jinni",
+   "Found": "...e License(s) Distinctions: R.S. Andrews is a Rinnai ACE PRO dealer. The company employs a Backfl...",
+   "Page": "pdf 89",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Sentricon",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...pest control companies. NFPS is a Certified Sentricon Specialist, a Termidor Certified Professiona...",
+   "Page": "pdf 84",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "SherwinWilliams",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...ation: Siding Depot carries James Hardie and SherwinWilliams products. The company offers free, no-obliga...",
+   "Page": "pdf 102",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Slocomb",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "holcomb, slocum",
+   "Found": "...Additional Information: The company carries Slocomb and ProVia windows and doors, James Hardie s...",
+   "Page": "pdf 121",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Solera",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "sclera",
+   "Found": "...pes include woven wood and honeycomb shades. Solera, vignette, and roman shades are also popular...",
+   "Page": "pdf 16",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Termidor",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "thermidor",
+   "Found": "...NFPS is a Certified Sentricon Specialist, a Termidor Certified Professional, and a member of the...",
+   "Page": "pdf 84",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "TheHomeMag",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...National Association of Home Builders, and a TheHomeMag Certified Partner. Employee Information: Emp...",
+   "Page": "pdf 15",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Thermador",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "thermidor",
+   "Found": "...Maytag, KitchenAid, Sub-Zero, Wolf, Viking, Thermador, Dacor, Bosh, GE, JennAir, Scotsman, and mor...",
+   "Page": "pdf 13",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Trane",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "trade, trace, crane",
+   "Found": "...ng, Heating, & Air is a Rheem Pro Partner, a Trane Comfort Specialist, and part of the GreenHom...",
+   "Page": "pdf 11",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Trex",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "tree, trek, rex",
+   "Found": "...0024 Services Offered: Nelson Exteriors is a Trex and TimberTech composite deck installation a...",
+   "Page": "pdf 28",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "TruGuard",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "",
+   "Found": "...s and doors, James Hardie siding and soffit, TruGuard gutter protection systems, and GAF roofing....",
+   "Page": "pdf 121",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Tuftex",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "tufted, tufter",
+   "Found": "...ington, Karastan, Masland, Stanton, Anderson Tuftex, Daltile, and more. Homeowner Satisfaction R...",
+   "Page": "pdf 45",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Versico",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "version, verdict, vertigo",
+   "Found": "...r, a CertainTeed Select ShingleMaster, and a Versico Authorized Contractor. The company won GAF\u2019s...",
+   "Page": "pdf 98",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Waleska",
+   "Issue": "Spelling: Name/brand not in dictionary -- check against contract",
+   "Expected": "walesa",
+   "Found": "...tile. The company does not serve Austell or Waleska. Minimum Job: A $2,000 project minimum is re...",
+   "Page": "pdf 71",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P3"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "CertainTeed",
+   "Issue": "Spelling: Not in dictionary, used consistently (5x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...iability Insurance Distinctions: Echols is a CertainTeed ShingleMaster and a GAF Master Elite Roofing...  (+4 more)",
+   "Page": "pdf 97, pdf 98, pdf 119",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Deckorators",
+   "Issue": "Spelling: Not in dictionary, used consistently (5x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...ntractor, a TimberTech Pro Contractor, and a Deckorators Certified Pro. Verified General Liability In...  (+4 more)",
+   "Page": "pdf 28, pdf 82, pdf 99, pdf 101, pdf 120",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Derakhshan",
+   "Issue": "Spelling: Not in dictionary, used consistently (3x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...creating a lifestyle tailored to you.\u201d Navid Derakhshan | CEO Warranty: Customer satisfaction is gua...  (+2 more)",
+   "Page": "pdf 74, pdf 78, pdf 91",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "ecofriendly",
+   "Issue": "Spelling: Joined words -- hyphen lost at a line break, or missing in copy?",
+   "Expected": "",
+   "Found": "...ing solutions. If possible, opt for the most ecofriendly option available, since some of it will like...",
+   "Page": "pdf 94",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Friedlander",
+   "Issue": "Spelling: Not in dictionary, used consistently (4x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...to do the job right the first time.\u201d Michael Friedlander | CEO Warranty: Dr Roof Atlanta provides lif...  (+3 more)",
+   "Page": "pdf 98, pdf 103",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Guildmaster",
+   "Issue": "Spelling: Not in dictionary, used consistently (6x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...Qualified Remodeler Top 500, a GuildQuality Guildmaster Award winner, a TrexPro Gold contractor, a T...  (+5 more)",
+   "Page": "pdf 28, pdf 58, pdf 82, pdf 99, pdf 101, pdf 120",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "GuildQuality",
+   "Issue": "Spelling: Not in dictionary, used consistently (10x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...er of NARI, a Qualified Remodeler Top 500, a GuildQuality Guildmaster Award winner, a TrexPro Gold con...  (+9 more)",
+   "Page": "pdf 28, pdf 58, pdf 82, pdf 97, pdf 99, pdf 101, pdf 119, pdf 120, pdf 124",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Gwinnett",
+   "Issue": "Spelling: Not in dictionary, used consistently (3x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...th MacKinnon serves on the advisory board of Gwinnett Technical College. Homeowner Satisfaction Re...  (+2 more)",
+   "Page": "pdf 9, pdf 46, pdf 68",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Hardie",
+   "Issue": "Spelling: Not in dictionary, used consistently (20x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...1998. Distinctions: Painting Plus is a James Hardie Elite Preferred Remodeler and a member of th...  (+19 more)",
+   "Page": "pdf 29, pdf 58, pdf 81, pdf 82, pdf 98, pdf 99, pdf 101, pdf 102, pdf 103, pdf 120, pdf 121",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "HardiePlank",
+   "Issue": "Spelling: Not in dictionary, used consistently (3x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...deck lighting, roofing, gutter replacement, HardiePlank siding, window and door installation, and pa...  (+2 more)",
+   "Page": "pdf 28, pdf 82, pdf 120",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Houzz",
+   "Issue": "Spelling: Not in dictionary, used consistently (6x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...2001. Distinctions: The company is a Best of Houzz 10x Winner, including Best of Houzz 2024. Se...  (+5 more)",
+   "Page": "pdf 74, pdf 78, pdf 91",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Janesky",
+   "Issue": "Spelling: Not in dictionary, used consistently (3x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...r for Contractor Nation (also owned by Larry Janesky) across the North Atlanta Metro and North Ge...  (+2 more)",
+   "Page": "pdf 25, pdf 49, pdf 114",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Lennox",
+   "Issue": "Spelling: Not in dictionary, used consistently (6x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...Distinctions: The company received the Dave Lennox 5 Year Excellence Award in 2011 and is a Len...  (+5 more)",
+   "Page": "pdf 10, pdf 36, pdf 69",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "MacKinnon",
+   "Issue": "Spelling: Not in dictionary, used consistently (3x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...g Performance Institute (BPI). Manager Keith MacKinnon serves on the advisory board of Gwinnett Tec...  (+2 more)",
+   "Page": "pdf 9, pdf 68",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "moistureresistant",
+   "Issue": "Spelling: Joined words -- hyphen lost at a line break, or missing in copy?",
+   "Expected": "",
+   "Found": "...is a popular choice because it\u2019s stain- and moistureresistant. Unglazed tile typically isn\u2019t used for floo...",
+   "Page": "pdf 104",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "mortarbased",
+   "Issue": "Spelling: Joined words -- hyphen lost at a line break, or missing in copy?",
+   "Expected": "",
+   "Found": "...es into the concrete slab. Then, they pump a mortarbased material or polyurethane foam into the voids...",
+   "Page": "pdf 24",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "Navid",
+   "Issue": "Spelling: Not in dictionary, used consistently (3x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...about creating a lifestyle tailored to you.\u201d Navid Derakhshan | CEO Warranty: Customer satisfac...  (+2 more)",
+   "Page": "pdf 74, pdf 78, pdf 91",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "ShingleMaster",
+   "Issue": "Spelling: Not in dictionary, used consistently (4x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...urance Distinctions: Echols is a CertainTeed ShingleMaster and a GAF Master Elite Roofing Contractor. M...  (+3 more)",
+   "Page": "pdf 97, pdf 98, pdf 119",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "TimberTech",
+   "Issue": "Spelling: Not in dictionary, used consistently (8x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...Woodworks specializes in building decks with TimberTech, MoistureShield, and New Castle Steel\u2019s full...  (+7 more)",
+   "Page": "pdf 27, pdf 28, pdf 82, pdf 99, pdf 101, pdf 120",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  },
+  {
+   "Sheet": "Book",
+   "Row": "",
+   "Key": "TrexPro",
+   "Issue": "Spelling: Not in dictionary, used consistently (6x) -- add to allow-list",
+   "Expected": "",
+   "Found": "...NADRA, ASHI, and HBAG; a MoistureShield and TrexPro authorized contractor; and a Sunspace and Wi...  (+5 more)",
+   "Page": "pdf 28, pdf 82, pdf 99, pdf 101, pdf 120",
+   "Source": "PrinterProof / pyspellchecker English",
+   "Priority": "P4"
+  }
+ ],
+ "qr": {
+  "skipped": true
+ }
+}

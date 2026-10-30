@@ -20,13 +20,16 @@ from pathlib import Path
 
 from . import bpr_textproof
 from . import adapter
+from . import spellcheck
 
 
-def run_printer_proof(pdf_path, out_dir, app_workbook=None, brand="BPR", app_note="", skip_qr=False):
+def run_printer_proof(pdf_path, out_dir, app_workbook=None, brand="BPR", app_note="", skip_qr=False,
+                      ref_path=None):
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     results_dir = out_dir / "results"
-    bpr_textproof.run(str(pdf_path), str(results_dir), skip_qr=skip_qr)
+    bpr_textproof.run(str(pdf_path), str(results_dir), skip_qr=skip_qr,
+                      spell_words=spellcheck.reference_words(ref_path))
     results_json = results_dir / "results.json"
     stem = Path(pdf_path).stem
     out_xlsx = out_dir / f"{stem}_proof_merged.xlsx"

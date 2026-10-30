@@ -22,6 +22,8 @@ import subprocess
 import sys
 import uuid
 
+from .spellcheck import bbox_text_blocks, check_pages
+
 import cv2
 import numpy as np
 
@@ -62,7 +64,13 @@ LEADER = re.compile(r'\s*[.]\s*(?:[.]\s*){2,}\s*(\d{1,3})(?=\s|$)')
 
 
 def sh(cmd):
-    return subprocess.run(cmd, capture_output=True, text=True)
+    return subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
 
 
 def _tmp(workdir, stem, ext=""):
@@ -96,8 +104,9 @@ def text_pages(pdf, n, layout=True):
 def word_boxes(pdf, workdir):
     p = _tmp(workdir, "bbox", ".xml")
     sh(["pdftotext", "-bbox-layout", pdf, p])
-    d = open(p, errors="ignore").read()
+    d = open(p, encoding="utf-8", errors="replace").read()
     os.remove(p)
+    text_blocks = bbox_text_blocks(d)
     pages = re.findall(r'<page width="([\d.]+)" height="([\d.]+)">(.*?)</page>', d, re.S)
     LINE = re.compile(r'<line [^>]*>(.*?)</line>', re.S)
     WORD = re.compile(r'<word xMin="([\d.]+)" yMin="([\d.]+)" xMax="([\d.]+)" yMax="([\d.]+)">(.*?)</word>')
@@ -109,7 +118,7 @@ def word_boxes(pdf, workdir):
                    re.sub(r'&[a-z]+;', 'x', e)) for a, b, c, dd, e in WORD.findall(lm)]
             lines.append(ws)
         out.append({"page": pi, "w": float(w), "h": float(h), "lines": lines})
-    return out
+    return out, text_blocks
 
 
 def inventory(geo):
@@ -603,7 +612,7 @@ def check_qr(pdf, raw, workdir, verbose=True):
 
 
 # ----------------------------------------------------------------------- run
-def run(pdf, outdir, skip_qr=False):
+def run(pdf, outdir, skip_qr=False, spell_words=None):
     os.makedirs(outdir, exist_ok=True)
     workdir = os.path.join(outdir, "_work")
     os.makedirs(os.path.join(workdir, "tmp"), exist_ok=True)
@@ -618,7 +627,7 @@ def run(pdf, outdir, skip_qr=False):
 
     lay = text_pages(pdf, n, layout=True)
     raw = text_pages(pdf, n, layout=False)
-    geo = word_boxes(pdf, workdir)
+    geo, text_blocks = word_boxes(pdf, workdir)
     inv = inventory(geo)
 
     cats = category_pages(lay)
@@ -652,6 +661,10 @@ def run(pdf, outdir, skip_qr=False):
         "hygiene": check_text_hygiene(raw),
         "licences": check_licences(geo),
         "tracking": check_tracking(geo),
+        # Geometry-aware blocks preserve each column/design area's reading flow
+        # and allow wrapped words to rejoin without mixing adjacent columns.
+        "spellcheck": check_pages(text_blocks, allowlist=spell_words),
+        "spellcheck_blocks": sum(len(blocks) for blocks in text_blocks.values()),
     }
     print("Decoding QR codes..." if not skip_qr else "Skipping QR pass")
     r["qr"] = {"skipped": True} if skip_qr else check_qr(pdf, raw, workdir)

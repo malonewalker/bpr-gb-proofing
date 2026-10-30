@@ -73,6 +73,7 @@ def run_combined_proofing_ui(pdf_file, ref_file):
                     app_workbook=str(app_workbook) if app_workbook else None,
                     brand="BPR",
                     app_note=app_note,
+                    ref_path=str(ref_path),
                 )
             except Exception as e:
                 st.error("The printer-proof scan failed.")
