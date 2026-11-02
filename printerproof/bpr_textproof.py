@@ -23,6 +23,7 @@ import sys
 import uuid
 
 from .spellcheck import bbox_text_blocks, check_pages
+from .book_reference import check_book_reference
 
 import cv2
 import numpy as np
@@ -620,7 +621,7 @@ def check_qr(pdf, raw, workdir, verbose=True):
 
 
 # ----------------------------------------------------------------------- run
-def run(pdf, outdir, skip_qr=False, spell_words=None):
+def run(pdf, outdir, skip_qr=False, spell_words=None, book_reference_data=None):
     os.makedirs(outdir, exist_ok=True)
     workdir = os.path.join(outdir, "_work")
     os.makedirs(os.path.join(workdir, "tmp"), exist_ok=True)
@@ -676,6 +677,8 @@ def run(pdf, outdir, skip_qr=False, spell_words=None):
     }
     print("Decoding QR codes..." if not skip_qr else "Skipping QR pass")
     r["qr"] = {"skipped": True} if skip_qr else check_qr(pdf, raw, workdir)
+    if book_reference_data:
+        r["book_reference"] = check_book_reference(lay, r["qr"], book_reference_data)
 
     with open(os.path.join(outdir, "results.json"), "w") as f:
         json.dump(r, f, indent=1)

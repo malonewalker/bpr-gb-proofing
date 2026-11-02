@@ -196,8 +196,36 @@ def printerproof_rows(r, brand):
             E.append(row(dest, "Same QR destination appears on more than one page", "unique", str(pages), prio="P1"))
         cov("QR codes decoded", "FIX" if (q["short_by_page"] or q["duplicates"]) else "PASS",
             f"{q['decoded']}/{q['expected']} decoded, {q['unique']} unique destinations")
-    cov("Back-cover QR destination / UTMs (metro + book)", "NEEDS MANUAL CHECK",
-        "decoded short link recorded; compare to the Back Cover bitlys sheet (lookup to be added)")
+    # -- published book-name / cover / QR reference
+    book_ref = r.get("book_reference")
+    if book_ref:
+        failed = []
+        did_not_run = []
+        for check in book_ref.get("checks", []):
+            if check["status"] == "FIX":
+                failed.append(check)
+                E.append(row(
+                    check["name"],
+                    f"Published book reference mismatch: {check['name']}",
+                    check["expected"],
+                    check["found"],
+                    page=folio_of(r, check["page"]) or f"pdf {check['page']}",
+                    prio="P2",
+                ))
+            elif check["status"] == "DID NOT RUN":
+                did_not_run.append(check)
+        status = "FIX" if failed else ("DID NOT RUN" if did_not_run else "PASS")
+        detail = "; ".join(
+            f"{check['name']}: {check['status']}"
+            for check in book_ref.get("checks", [])
+        )
+        cov(
+            f"Published BPR book reference ({book_ref.get('lookup', '')})",
+            status,
+            detail,
+        )
+    else:
+        cov("Published BPR book reference", "DID NOT RUN", "No matched reference data was supplied")
 
     # -- characters / hygiene
     c = r["characters"]
@@ -240,9 +268,8 @@ def printerproof_rows(r, brand):
         f"(expect front-matter / mixed-font pages to flag; confirm by eye)")
 
     # -- standing manual items
-    cov("Front/back covers present, metro spelled right, edition year/season", "NEEDS MANUAL CHECK",
-        f"cover reads '{r.get('cover_metro')}', edition {r.get('edition')} — placed artwork needs eyes; "
-        f"text can be matched to Book Cover Titles sheet once that lookup is wired in")
+    cov("Front/back cover artwork and edition season/year", "NEEDS MANUAL CHECK",
+        f"cover reads '{r.get('cover_metro')}', edition {r.get('edition')} — placed artwork and season/year still need eyes")
     cov("Placed artwork on front matter (website mockup, guarantee photo)", "NEEDS MANUAL CHECK",
         "raster art is invisible to text extraction — render-and-inspect, or compare across the wave")
     cov("Salesforce Production / Specialty Notes applied", "NEEDS MANUAL CHECK", "human judgment")
