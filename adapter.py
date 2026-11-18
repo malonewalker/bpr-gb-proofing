@@ -386,21 +386,16 @@ def check_toc(lay, listing, raw, inv):
 
 
 def check_characters(raw):
-    straight, nested, glyphs = [], [], []
+    glyphs = []
     dashes = collections.Counter()
     for i, t in raw.items():
         flat = t.replace("\n", " ")
-        for m in re.finditer(r".{0,32}\w'\w.{0,28}", flat):
-            straight.append([i, re.sub(r'\s+', ' ', m.group(0))])
-        for m in re.finditer(r'[“"][‘’\'][^”"]{0,70}[‘’\'][”"]', flat):
-            nested.append([i, re.sub(r'\s+', ' ', m.group(0))])
         for m in re.finditer(r'.{0,25}[-].{0,25}', flat):
             glyphs.append([i, re.sub(r'\s+', ' ', m.group(0))])
         for ch in t:
             if ch in '-‐‑‒–—­−':
                 dashes[ch] += 1
-    return {"straight_apostrophes": straight, "nested_quotes": nested,
-            "private_use_glyphs": glyphs,
+    return {"private_use_glyphs": glyphs,
             "dash_census": {f"U+{ord(k):04X}": v for k, v in dashes.items()}}
 
 
@@ -706,9 +701,7 @@ def report(r):
     print(f"    cross-category differences: {len(t['cross_category'])} of "
           f"{t['multi_category_companies']} multi-category companies")
     c = r["characters"]
-    print(f"  Characters          : {len(c['straight_apostrophes'])} straight "
-          f"apostrophes, {len(c['nested_quotes'])} doubled quote marks, "
-          f"{len(c['private_use_glyphs'])} symbol-font glyphs")
+    print(f"  Characters          : {len(c['private_use_glyphs'])} symbol-font glyphs")
     h = r["hygiene"]
     print(f"  Hygiene             : {len(h['ordinals'])} bad ordinals, "
           f"{len(h['doubled_words'])} doubled words, "

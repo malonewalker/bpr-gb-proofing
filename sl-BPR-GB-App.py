@@ -110,7 +110,7 @@ def main():
 
         The same run also performs the **printer-proof scan** on the PDF —
         page order and page count, QR codes, ratings vs star histograms, Quick Reference Sheet,
-        licence pairing, apostrophes and text tracking — and adds the results to the same
+        licence pairing, and text tracking — and adds the results to the same
         **Errors** tab plus a **Coverage** tab. Both uploaded files are required before the
         combined proofing run can start.
         """

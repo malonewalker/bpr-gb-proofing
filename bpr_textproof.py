@@ -5,7 +5,7 @@ printerproof — the pre-printer scan, packaged for the BPR Guidebook Proofing a
     out = run_printer_proof(pdf_path, out_dir, app_workbook=None, brand="BPR")
 
 Runs bpr_textproof on the PDF (page order, page count, QR codes, ratings vs
-histograms, Quick Reference Sheet, licence pairing, apostrophes, tracking) and
+histograms, Quick Reference Sheet, licence pairing, text tracking) and
 writes one workbook in the app's Errors layout plus a Coverage tab. If the
 app's own combined workbook is passed in, its Errors rows are merged in so the
 proofer reads one file.

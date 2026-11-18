@@ -399,22 +399,16 @@ def check_toc(lay, listing, raw, inv):
 
 
 def check_characters(raw):
-    smart_apostrophes, smart_quotes, glyphs = [], [], []
+    glyphs = []
     dashes = collections.Counter()
     for i, t in raw.items():
         flat = t.replace("\n", " ")
-        for m in re.finditer(r".{0,32}\w’\w.{0,28}", flat):
-            smart_apostrophes.append([i, re.sub(r'\s+', ' ', m.group(0))])
-        for m in re.finditer(r'.{0,32}“[^”\n]{0,160}”.{0,28}', flat):
-            smart_quotes.append([i, re.sub(r'\s+', ' ', m.group(0))])
         for m in re.finditer(r'.{0,25}[-].{0,25}', flat):
             glyphs.append([i, re.sub(r'\s+', ' ', m.group(0))])
         for ch in t:
             if ch in '-‐‑‒–—­−':
                 dashes[ch] += 1
-    return {"smart_apostrophes": smart_apostrophes,
-            "smart_quotation_marks": smart_quotes,
-            "private_use_glyphs": glyphs,
+    return {"private_use_glyphs": glyphs,
             "dash_census": {f"U+{ord(k):04X}": v for k, v in dashes.items()}}
 
 
@@ -730,9 +724,7 @@ def report(r):
     print(f"    cross-category differences: {len(t['cross_category'])} of "
           f"{t['multi_category_companies']} multi-category companies")
     c = r["characters"]
-    print(f"  Characters          : {len(c['smart_apostrophes'])} smart "
-          f"apostrophes, {len(c.get('smart_quotation_marks', []))} smart quote pairs, "
-          f"{len(c['private_use_glyphs'])} symbol-font glyphs")
+    print(f"  Characters          : {len(c['private_use_glyphs'])} symbol-font glyphs")
     h = r["hygiene"]
     print(f"  Hygiene             : {len(h['ordinals'])} bad ordinals, "
           f"{len(h['doubled_words'])} doubled words, "

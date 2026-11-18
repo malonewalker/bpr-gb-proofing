@@ -227,25 +227,7 @@ def printerproof_rows(r, brand):
     else:
         cov("Published BPR book reference", "DID NOT RUN", "No matched reference data was supplied")
 
-    # -- characters / hygiene
-    c = r["characters"]
-    byword = {}
-    for p, ctx in c.get("smart_apostrophes", []):
-        m = re.search(r"[A-Za-z]+’[A-Za-z]+", ctx)
-        wd = m.group(0) if m else ctx.strip()[:30]
-        byword.setdefault(wd, set()).add(folio_of(r, p) or f"pdf {p}")
-    for wd, pages in byword.items():
-        E.append(row(wd, f"Curly/smart apostrophe in '{wd}' — use a straight apostrophe",
-                     wd.replace("’", "'"), wd, page=", ".join(str(x) for x in sorted(pages, key=str)), prio="P3"))
-    smart_quotes = c.get("smart_quotation_marks", [])
-    for p, ctx in smart_quotes:
-        E.append(row(ctx.strip(), "Curly/smart quotation marks — use straight quotation marks",
-                     '"quoted text"', "“quoted text”", page=folio_of(r, p), prio="P3"))
-    character_issues = c.get("smart_apostrophes", []) or smart_quotes
-    cov("Curly/smart apostrophes and quotation marks", "VERIFY" if character_issues else "PASS",
-        f"{len(c.get('smart_apostrophes', []))} smart apostrophes in {len(byword)} distinct word(s) {sorted(byword)}, "
-        f"{len(smart_quotes)} smart quote pair(s) "
-        f"(symbol-font glyphs: {len(c['private_use_glyphs'])}, icon fonts — informational)")
+    # -- text hygiene
     h = r["hygiene"]
     for p, s in h["ordinals"]:
         E.append(row(s, "Wrong ordinal suffix", "", s, page=folio_of(r, p), prio="P2"))
